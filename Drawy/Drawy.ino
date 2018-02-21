@@ -169,15 +169,29 @@ bool readController() {
         //do cool stuff
         draw();
         for(int i = 0; i<100; i++){
-          int option = random(1,20);
+          int option = random(1,5);
           switch(option){
             case 1:
-              halfcircle_right();
-              halfcircle_left();
+              down();
+              down();
+              down();
+              left();
+              up();
+              left();
+              up();
+              left();
+              up();
             break;
             case 2:
-              halfcircle_right();
-              halfcircle_left();
+              down();
+              down();
+              down();
+              right();
+              up();
+              right();
+              up();
+              right();
+              up();
             break;
             default:
               left();
