@@ -10,7 +10,7 @@
 
 #include <Arduino.h>
 
-// Tthis is all setup for our bluetooth module built into the Feather
+// This is all setup for our bluetooth module built into the Feather
 #include <Adafruit_BLE.h>
 #include <Adafruit_BluefruitLE_SPI.h>
 #include "BluefruitConfig.h"
@@ -54,13 +54,16 @@ extern uint8_t packetbuffer[];
 
 char buf[60];
 
-// Set your forward, reverse, drift corrections, and turning speeds
+
+// Set your forward, reverse, drift corrections, and turning speeds as well as the 
+// segment time. 
 #define ForwardSpeed                60
 #define ReverseSpeed                60
 #define TurningSpeed                60
 #define DriftCorrection             1
-
 #define SegmentLength               150
+
+
 
 //create a Servo object, which we will address when we need to talk to the servo
 Servo servo;
@@ -124,110 +127,63 @@ bool readController() {
 
     if (pressed) {
       if (buttnum == 1) {
+        //cycle the pen
         if (penDown){
-          servo.write(130);
+          lift();
           penDown = false;
         }
         else {
-          servo.write(180);
+          draw();
           penDown = true;
         }        
       }
 
       if (buttnum == 2) {
+        //do cool stuff
+        draw();
         for(int i = 0; i<100; i++){
           int option = random(1,20);
           switch(option){
             case 1:
               up();
+              left();
+              down();
             break;
             case 2:
               down();
+              left();
+              up();
             break;
             default:
               left();
           }
         }
+        lift();
       }
 
       if (buttnum == 3) {
-        //"D"
-        draw();
-        up();
-        up();
-        diagonal_right();
-        diagonal_left();
-        lift();
-        right();
-        //"R"
-        draw();
-        up();
-        up();
-        halfcircle_right();
-        diagonal_right();
-        lift();
-        //"A"
-        draw();
-        up();
-        up();
-        right();
-        down();
-        down();
-        lift();
-        up();
-        draw();
-        left();
-        lift();
-        down();
-        right();
-        //"W"
-        up();
-        up();
-        draw();
-        down();
-        down();
-        right();
-        up();
-        down();
-        right();
-        up();
-        up();
-        lift();
-        down();
-        down();
-        //"Y"
-        up();
-        up();
-        draw();
-        diagonal_right();
-        lift();
-        up();
-        draw();
-        diagonal_left();
-        diagonal_left();
-        diagonal_left();
-        lift();
-        //go away a bit
-        down();
-        down();
-        down();
+        writeDrawy();
       }
 
       if (buttnum == 4) {
-        for (float i = 1; i < 1000; i++) {
-          //circle_size must be greater than .21
-          float circle_size = .21 + i / 1000;
-          float distance_between_motors = 1;
-          float right_motor_speed = 45;
-          float left_motor_speed = constrain(right_motor_speed * ((circle_size + distance_between_motors) / circle_size), 45, 255);
-          L_MOTOR->setSpeed(left_motor_speed);
-          R_MOTOR->setSpeed(right_motor_speed);
-          L_MOTOR->run(BACKWARD);
-          R_MOTOR->run(BACKWARD);
-          delay(10);
-          Serial.println(circle_size);
-          Serial.println(left_motor_speed);
+        //do cool stuff
+        draw();
+        for(int i = 0; i<100; i++){
+          int option = random(1,20);
+          switch(option){
+            case 1:
+              halfcircle_right();
+              halfcircle_left();
+            break;
+            case 2:
+              halfcircle_right();
+              halfcircle_left();
+            break;
+            default:
+              left();
+          }
         }
+        lift();
 
       }
 
@@ -283,109 +239,6 @@ bool readController() {
   }
 }
 
-void draw() {
-  servo.write(180);
-  delay(300);
-}
-
-void lift() {
-  servo.write(130);
-  delay(300);
-}
-
-void up() {
-  L_MOTOR->setSpeed(ForwardSpeed);
-  R_MOTOR->setSpeed(ForwardSpeed);
-  L_MOTOR->run(BACKWARD);
-  R_MOTOR->run(BACKWARD);
-  delay(SegmentLength);
-  L_MOTOR->run(RELEASE);
-  R_MOTOR->run(RELEASE);
-  delay(SegmentLength);
-}
-
-void down() {
-  L_MOTOR->setSpeed(ReverseSpeed);
-  R_MOTOR->setSpeed(ReverseSpeed);
-  L_MOTOR->run(FORWARD);
-  R_MOTOR->run(FORWARD);
-  delay(SegmentLength);
-  L_MOTOR->run(RELEASE);
-  R_MOTOR->run(RELEASE);
-  delay(SegmentLength);
-}
-
-void right() {
-  L_MOTOR->setSpeed(TurningSpeed);
-  R_MOTOR->setSpeed(TurningSpeed);
-  L_MOTOR->run(FORWARD);
-  R_MOTOR->run(BACKWARD);
-  delay(SegmentLength);
-  L_MOTOR->run(RELEASE);
-  R_MOTOR->run(RELEASE);
-  delay(SegmentLength);
-}
-
-void left() {
-  L_MOTOR->setSpeed(TurningSpeed);
-  R_MOTOR->setSpeed(TurningSpeed);
-  L_MOTOR->run(BACKWARD);
-  R_MOTOR->run(FORWARD);
-  delay(SegmentLength);
-  L_MOTOR->run(RELEASE);
-  R_MOTOR->run(RELEASE);
-  delay(SegmentLength);
-}
-
-void halfcircle_right() {
-  L_MOTOR->setSpeed(TurningSpeed);
-  R_MOTOR->setSpeed(TurningSpeed);
-  L_MOTOR->run(FORWARD);
-  R_MOTOR->run(RELEASE);
-  delay(150);
-  L_MOTOR->run(RELEASE);
-  R_MOTOR->run(FORWARD);
-  delay(150);
-  L_MOTOR->run(RELEASE);
-  R_MOTOR->run(RELEASE);
-  delay(150);
-}
-
-void halfcircle_left() {
-  L_MOTOR->setSpeed(TurningSpeed);
-  R_MOTOR->setSpeed(TurningSpeed);
-  L_MOTOR->run(BACKWARD);
-  R_MOTOR->run(FORWARD);
-  delay(SegmentLength * 0.605);
-  L_MOTOR->run(RELEASE);
-  R_MOTOR->run(BACKWARD);
-  delay(SegmentLength * 0.605);
-  L_MOTOR->run(RELEASE);
-  R_MOTOR->run(RELEASE);
-  delay(SegmentLength);
-}
-
-void diagonal_right() {
-  L_MOTOR->setSpeed(TurningSpeed);
-  R_MOTOR->setSpeed(TurningSpeed);
-  L_MOTOR->run(FORWARD);
-  R_MOTOR->run(RELEASE);
-  delay(300);
-  L_MOTOR->run(RELEASE);
-  R_MOTOR->run(RELEASE);
-  delay(150);
-}
-
-void diagonal_left() {
-  L_MOTOR->setSpeed(TurningSpeed);
-  R_MOTOR->setSpeed(TurningSpeed);
-  L_MOTOR->run(RELEASE);
-  R_MOTOR->run(FORWARD);
-  delay(300);
-  L_MOTOR->run(RELEASE);
-  R_MOTOR->run(RELEASE);
-  delay(150);
-}
 
 void BLEsetup() {
   Serial.print(F("Initialising the Bluefruit LE module: "));
@@ -446,5 +299,6 @@ void BLEsetup() {
 
   Serial.println(F("*****************"));
 }
+
 
 
