@@ -94,3 +94,37 @@ void exampleDrawing004(){
   }
   lift();
 }
+
+void mattDraw(){
+  draw();
+  for(int i = 0; i<100; i++){
+    int option = random(1,4);
+    switch(option){
+      case 1:
+        up();
+        up();
+        down();
+        down();
+        left();
+        right();
+        halfcircle_right();
+        diagonal_left();
+        lift();
+        draw();
+       break;
+       case 3:
+        diagonal_right();
+        left();
+        halfcircle_left();
+        up();
+        right();
+        right();
+        break;
+       default:
+        halfcircle_right();
+        halfcircle_right();
+       break;
+    }
+  }
+}
+

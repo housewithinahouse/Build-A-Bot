@@ -166,7 +166,7 @@ bool readController() {
       }
 
       if (buttnum == 4) {
-        exampleDrawing004();
+        mattDraw();
       }
 
       if (buttnum == 5) {
