@@ -166,39 +166,7 @@ bool readController() {
       }
 
       if (buttnum == 4) {
-        //do cool stuff
-        draw();
-        for(int i = 0; i<100; i++){
-          int option = random(1,5);
-          switch(option){
-            case 1:
-              down();
-              down();
-              down();
-              left();
-              up();
-              left();
-              up();
-              left();
-              up();
-            break;
-            case 2:
-              down();
-              down();
-              down();
-              right();
-              up();
-              right();
-              up();
-              right();
-              up();
-            break;
-            default:
-              left();
-          }
-        }
-        lift();
-
+        exampleDrawing004();
       }
 
       if (buttnum == 5) {
