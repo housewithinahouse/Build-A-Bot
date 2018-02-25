@@ -77,14 +77,42 @@ void halfcircle_right() {
   delay(SegmentLength);
 }
 
-void halfcircle_left() {
+void up_halfcircle_right() {
   L_MOTOR->setSpeed(TurningSpeed);
   R_MOTOR->setSpeed(TurningSpeed);
   L_MOTOR->run(BACKWARD);
-  R_MOTOR->run(FORWARD);
+  R_MOTOR->run(RELEASE);
   delay(SegmentLength);
   L_MOTOR->run(RELEASE);
   R_MOTOR->run(BACKWARD);
+  delay(SegmentLength);
+  L_MOTOR->run(RELEASE);
+  R_MOTOR->run(RELEASE);
+  delay(SegmentLength);
+}
+
+void halfcircle_left() {
+  L_MOTOR->setSpeed(TurningSpeed);
+  R_MOTOR->setSpeed(TurningSpeed);
+  L_MOTOR->run(RELEASE);
+  R_MOTOR->run(BACKWARD);
+  delay(SegmentLength);
+  L_MOTOR->run(BACKWARD);
+  R_MOTOR->run(RELEASE);
+  delay(SegmentLength);
+  L_MOTOR->run(RELEASE);
+  R_MOTOR->run(RELEASE);
+  delay(SegmentLength);
+}
+
+void up_halfcircle_left() {
+  L_MOTOR->setSpeed(TurningSpeed);
+  R_MOTOR->setSpeed(TurningSpeed);
+  L_MOTOR->run(RELEASE);
+  R_MOTOR->run(BACKWARD);
+  delay(SegmentLength);
+  L_MOTOR->run(BACKWARD);
+  R_MOTOR->run(RELEASE);
   delay(SegmentLength);
   L_MOTOR->run(RELEASE);
   R_MOTOR->run(RELEASE);
@@ -101,12 +129,33 @@ void diagonal_right() {
   R_MOTOR->run(RELEASE);
   delay(150);
 }
+void up_diagonal_right() {
+  L_MOTOR->setSpeed(TurningSpeed);
+  R_MOTOR->setSpeed(TurningSpeed);
+  L_MOTOR->run(BACKWARD);
+  R_MOTOR->run(RELEASE);
+  delay(300);
+  L_MOTOR->run(RELEASE);
+  R_MOTOR->run(RELEASE);
+  delay(150);
+}
 
 void diagonal_left() {
   L_MOTOR->setSpeed(TurningSpeed);
   R_MOTOR->setSpeed(TurningSpeed);
   L_MOTOR->run(RELEASE);
   R_MOTOR->run(FORWARD);
+  delay(300);
+  L_MOTOR->run(RELEASE);
+  R_MOTOR->run(RELEASE);
+  delay(150);
+}
+
+void up_diagonal_left() {
+  L_MOTOR->setSpeed(TurningSpeed);
+  R_MOTOR->setSpeed(TurningSpeed);
+  L_MOTOR->run(RELEASE);
+  R_MOTOR->run(BACKWARD);
   delay(300);
   L_MOTOR->run(RELEASE);
   R_MOTOR->run(RELEASE);
