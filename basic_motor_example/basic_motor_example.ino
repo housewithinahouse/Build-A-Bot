@@ -1,12 +1,15 @@
 // We've also attached a daughter board to our Feather. This additional board.
-// also known as a Wing, or a Shield if we were using an Arduino need a
-// library to drive it. 
+// also known as a Wing, or a Shield if we were using an Arduino, needs a
+// library to drive it. This statement includes this library so that we have access to
+// it in the rest of our program. 
 #include <Adafruit_MotorShield.h>
 
-// Create the motor shield object with the default I2C address
+// We need to create an object representing the Adafruit Motor Shield. We do this by
+// creating an object of the type "Adafruit_MotorShield" named AFMS. 
 Adafruit_MotorShield AFMS = Adafruit_MotorShield(); 
 
-// And connect 2 DC motors to port M3 & M4 !
+// We're also creating two objects of the type "Adafruit_DCMotor", one for each of the 
+// motors on our drawing robot. 
 Adafruit_DCMotor *L_MOTOR = AFMS.getMotor(3);
 Adafruit_DCMotor *R_MOTOR = AFMS.getMotor(4);
 
