@@ -14,18 +14,20 @@ Adafruit_DCMotor *L_MOTOR = AFMS.getMotor(3);
 Adafruit_DCMotor *R_MOTOR = AFMS.getMotor(4);
 
 void setup() {
-  // put your setup code here, to run once:
-   AFMS.begin();  // create with the default frequency 1.6KHz
-
-    // turn on motors
-  L_MOTOR->setSpeed(0);
-  L_MOTOR->run(RELEASE);
-
-  R_MOTOR->setSpeed(0);
-  R_MOTOR->run(RELEASE);
+  /* The setup section of your code runs once, when the 
+  *  board first boots up. In this example, we only need to 
+  *  do one thing, initalize the AFMS object. 
+  */
+  AFMS.begin();
 }
 
 void loop() {
+  /* The loop section of your code will be run through 
+   * continuously, from top to bottom. In this example,    
+   * we want to robot to rotate in a circle. We set the 
+   * speed for each of the motors and then tell each of the
+   * motors to run. 
+   */
   L_MOTOR->setSpeed(100);
   R_MOTOR->setSpeed(100);
   L_MOTOR->run(BACKWARD);
