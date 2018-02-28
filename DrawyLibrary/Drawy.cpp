@@ -27,6 +27,10 @@ void Drawy::initalize(){
 }
 
 void Drawy::penUp(){
-  
+  _servo.write(180);
+}
+
+void Drawy::penDown(){
+  _servo.write(130);
 }
 
