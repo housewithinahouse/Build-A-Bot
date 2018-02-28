@@ -14,11 +14,26 @@ class Drawy
     Adafruit_DCMotor *_R_MOTOR = _AFMS.getMotor(4);
     int _servopin;
     bool _penDown;
+    int _l_speed;
+    int _r_speed;
+    int _default_segment_length;
+    int _default_pause_length;
+    void _stop();
+    void _go(uint8_t l_cmd, uint8_t r_cmd);
   public: 
     Drawy();
     void initalize();
     void penUp();
     void penDown();
+    void penCycle();
+    void up();
+    void down();
+    void left();
+    void right();
+    void up_diagonal_left();
+    void down_diagonal_left();
+    void up_diagonal_right();
+    void down_diagonal_right();
 };
 
 #endif

@@ -1,1 +1,0 @@
-2/27/18 - Very much a work in progress, I just wanted to try out writing a library, and this is it so far. Right now all it does is move the pen up and down, but I think that this might be a much better way to teach the basics of programming the robot. 
