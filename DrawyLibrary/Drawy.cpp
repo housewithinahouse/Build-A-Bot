@@ -97,24 +97,24 @@ void Drawy::left()
   _stop();
 }
 
-void Drawy::down_diagonal_right() {
+void Drawy::downDiagonalRight() {
   _go(RELEASE, BACKWARD);
   delay(_default_segment_length);
   _stop();
 }
-void Drawy::up_diagonal_right() {
+void Drawy::upDiagonalRight() {
   _go(RELEASE, FORWARD);
   delay(_default_segment_length);
   _stop();
 }
 
-void Drawy::down_diagonal_left() {
+void Drawy::downDiagonalLeft() {
   _go(BACKWARD, RELEASE);
   delay(_default_segment_length);
   _stop();
 }
 
-void Drawy::up_diagonal_left() {
+void Drawy::upDiagonalLeft() {
   _go(FORWARD, RELEASE);
   delay(_default_segment_length);
   _stop();

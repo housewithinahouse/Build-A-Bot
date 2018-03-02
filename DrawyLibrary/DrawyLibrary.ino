@@ -34,27 +34,34 @@ void loop() {
   // put the pen on the page
   drawy.penDown();
   
-  // this is our switch statement. 
+  // this is our switch statement. A switch statement takes an input, in this case
+  // the random number we generated eariler and stored as "option". Then executes
+  // which ever case matches 
   switch(option)
   {
     
-    //if option == 1
-    case 1:
+    
+    case 1: //if option == 1
+      //our drawing bot has 8 basic wheel movements they are:
       drawy.up();
-      drawy.left();
-      drawy.down();
-    break;
-
-    //if option == 2
-    case 2:
       drawy.down();
       drawy.left();
+      drawy.right();
+      drawy.upDiagonalLeft();
+      drawy.downDiagonalLeft();
+      drawy.upDiagonalRight();
+      drawy.downDiagonalRight();
+    break; 
+   
+    case 2: //if option == 2
+      //you can use these in any order you want, and use as many or as few as you choose
+      drawy.down();
+      drawy.left();
       drawy.up();
     break;
-
-    //what to do if option doesn't match anything. 
-    default:
-      drawy.left();
+        
+    default: //what to do if option doesn't match anything. 
+      drawy.left();  //some times, however, you gotta take a page from NASCAR's book. 
   }
 
 }  

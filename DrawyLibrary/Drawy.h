@@ -30,10 +30,10 @@ class Drawy
     void down();
     void left();
     void right();
-    void up_diagonal_left();
-    void down_diagonal_left();
-    void up_diagonal_right();
-    void down_diagonal_right();
+    void upDiagonalLeft();
+    void downDiagonalLeft();
+    void upDiagonalRight();
+    void downDiagonalRight();
 };
 
 #endif
