@@ -1,5 +1,12 @@
+/** if you've not already looked at Drawy.h before this, I'd recomend starting there... **/
+
+
+
+
 #include "Arduino.h"
 #include "Drawy.h"
+
+int Drawy::_default_segment_length = 150;
 
 Drawy::Drawy()
 {
@@ -11,7 +18,6 @@ Drawy::Drawy()
   _r_speed = 60;
 
   // Delay Lengths
-  _default_segment_length = 150;
   _default_pause_length = 50;
 }
 
@@ -68,11 +74,13 @@ void Drawy::_go(uint8_t l_cmd, uint8_t r_cmd)
   _R_MOTOR->run(r_cmd);
 }
 
+
+
 // Basic movements
-void Drawy::up() 
+void Drawy::up(int segment_length = _default_segment_length) 
 {
   _go(FORWARD, FORWARD);
-  delay(_default_segment_length);
+  delay(segment_length);
   _stop();
 }
 
@@ -97,24 +105,24 @@ void Drawy::left()
   _stop();
 }
 
-void Drawy::downDiagonalRight() {
+void Drawy::downRight() {
   _go(RELEASE, BACKWARD);
   delay(_default_segment_length);
   _stop();
 }
-void Drawy::upDiagonalRight() {
+void Drawy::upRight() {
   _go(RELEASE, FORWARD);
   delay(_default_segment_length);
   _stop();
 }
 
-void Drawy::downDiagonalLeft() {
+void Drawy::downLeft() {
   _go(BACKWARD, RELEASE);
   delay(_default_segment_length);
   _stop();
 }
 
-void Drawy::upDiagonalLeft() {
+void Drawy::upLeft() {
   _go(FORWARD, RELEASE);
   delay(_default_segment_length);
   _stop();

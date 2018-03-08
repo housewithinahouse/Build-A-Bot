@@ -1,7 +1,15 @@
+// this is the Drawy library, used to make it easier to work with our little drawing friend. 
+// Let's go over the parts of this library and explain how they all work. 
+
+// In order to prevent libraries from messing up if they get included more than once, 
+// you gotta wrap the whole thing in this #ifndef then #define (if not defined then define) statement. 
 #ifndef Drawy_h
 #define Drawy_h
 
+// While normal .ino sketches don't have to explictly include "Arduino.h", libraries do. 
 #include "Arduino.h"
+
+// I've also included the two libraries that we used for servo and motor control in those example sketches
 #include <Adafruit_MotorShield.h>
 #include <Servo.h>
 
@@ -16,7 +24,7 @@ class Drawy
     bool _penDown;
     int _l_speed;
     int _r_speed;
-    int _default_segment_length;
+    static int _default_segment_length;
     int _default_pause_length;
     void _stop();
     void _go(uint8_t l_cmd, uint8_t r_cmd);
@@ -26,14 +34,14 @@ class Drawy
     void penUp();
     void penDown();
     void penCycle();
-    void up();
+    void up(int segment_length = _default_segment_length);
     void down();
     void left();
     void right();
-    void upDiagonalLeft();
-    void downDiagonalLeft();
-    void upDiagonalRight();
-    void downDiagonalRight();
+    void upLeft();
+    void downLeft();
+    void upRight();
+    void downRight();
 };
 
 #endif

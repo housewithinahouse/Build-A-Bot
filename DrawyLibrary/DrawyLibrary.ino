@@ -27,12 +27,12 @@ void loop() {
    * we will generate a random number and use it to pick 
    * drawy's movement, over and over again. */
 
+  // put the pen on the page
+  drawy.penDown();
+
   // generate a random number between 1 - 3 and store it 
   // in the variable "option"
   int option = random(1,3);
-
-  // put the pen on the page
-  drawy.penDown();
   
   // this is our switch statement. A switch statement takes an input, in this case
   // the random number we generated eariler and stored as "option". Then executes
@@ -47,10 +47,10 @@ void loop() {
       drawy.down();
       drawy.left();
       drawy.right();
-      drawy.upDiagonalLeft();
-      drawy.downDiagonalLeft();
-      drawy.upDiagonalRight();
-      drawy.downDiagonalRight();
+      drawy.upLeft();
+      drawy.downLeft();
+      drawy.upRight();
+      drawy.downRight();
     break; 
    
     case 2: //if option == 2
