@@ -16,13 +16,16 @@ Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_DCMotor *L_MOTOR = AFMS.getMotor(3);
 Adafruit_DCMotor *R_MOTOR = AFMS.getMotor(4);
 
-
-
-int rightSide, leftSide; 
-
+// Create names for each sensor
 int leftSensor = A0;
 int rightSensor = A1;
 
+//Create names for each sensor's LED
+int leftLED = 2;
+int rightLED = 1;
+
+// Create variables to store sensor readings
+int rightSide, leftSide; 
 
 void setup() {
  // turn on motors
@@ -31,16 +34,27 @@ void setup() {
 
   R_MOTOR->setSpeed(60);
   R_MOTOR->run(RELEASE);
-
+ 
+ //set sensors to receive information
   pinMode(leftSensor, INPUT);
   pinMode(rightSensor, INPUT);
-
+ 
+ //set LEDs to receive commands from Feather
+  pinMode(leftLED, OUTPUT);
+  pinMode(rightLED, OUTPUT);
+ 
+ //turn on LEDs
+  digitalWrite(leftLED, HIGH);
+  digitalWrite(rightLED, HIGH);
 }
 
 void loop() {
-  leftSide = leftSensor;
-  rightSide = rightSensor;
-
+ //write value of left and right side to readings of each sensor 
+  leftSide = analogRead(leftSensor);
+  rightSide = analogRead(rightSensor);
+ 
+ //test to see which sensor is over the line
+ //then turn the opposite wheel to keep the line centered
     if(leftSide > rightSide){
       L_MOTOR->run(RELEASE);
       R_MOTOR->run(FORWARD);
@@ -52,6 +66,4 @@ void loop() {
       R_MOTOR->run(RELEASE);
       delay(30);
     }
-  
-    
 }
