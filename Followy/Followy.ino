@@ -6,60 +6,81 @@
  *  Edwin Fallwell, MCPL 3/25/18
  */
 
-// got to include the library to make the motorshield work
+// We've attached a daughter board to our Feather. This additional board.
+// also known as a Wing, or a Shield if we were using an Arduino, needs a
+// library to drive it. This statement includes this library so that we have access to
+// it in the rest of our program. 
 #include <Adafruit_MotorShield.h>
 
-// Create the motor shield object with the default I2C address
-Adafruit_MotorShield AFMS = Adafruit_MotorShield();
+// We need to create an object representing the Adafruit Motor Shield. We do this by
+// creating an object of the type "Adafruit_MotorShield" named AFMS. 
+Adafruit_MotorShield AFMS = Adafruit_MotorShield(); 
 
-// And connect 2 DC motors to port M3 & M4 !
+// We're also creating two objects of the type "Adafruit_DCMotor", one for each of the 
+// motors on our line following robot. 
 Adafruit_DCMotor *L_MOTOR = AFMS.getMotor(3);
 Adafruit_DCMotor *R_MOTOR = AFMS.getMotor(4);
 
-// These vars hold the info about our speed
+// This time, we're going to adjust our speed over time, so we need some variables to hold this
+// information. We've got three valuse here to store our current speed, our maximum speed, 
+// and our default speed. Each of these has been set up with an inital value that I found to work 
+// from testing. 
 int currentSpeed = 0; 
 int maxSpeed = 100;
 int defaultSpeed = 60;
 
-// These vars are used in line detection + logic.
-int lineThreshold = 0; //set to something a little more logical. Testing will decide. 
+// We also need some variables to store information used in line detection + logic. These are the
+// threshold that determines if the reading we are getting from the sensor is detecting a line, and 
+// a special type of variable called a boolean, which stores either the value true or false. We are using
+// this to store the state of if the line has been detected. 
+int lineThreshold = 0; //this set to something a little more logical. Testing will decide. 
 bool lineDetectedFlag = false;
 
-void setup() {
- // turn on motors
-  L_MOTOR->setSpeed(0);
-  L_MOTOR->run(RELEASE);
-
-  R_MOTOR->setSpeed(0);
-  R_MOTOR->run(RELEASE);
-
-  // set the current speed to default. 
+void setup() {  
+   /* The setup section of your code runs once, when the 
+  *  board first boots up. In this sketch, we need to 
+  *  do two things, initalize the AFMS object + set the 
+  *  currentSpeed to the defaultSpeed. 
+  */  
+  AFMS.begin();
   currentSpeed = defaultSpeed;
-
 }
 
 void loop() {
+  /* The loop section of your code will be run through 
+   * continuously, from top to bottom. In this example,    
+   * we want to robot to rotate in a circle. We set the 
+   * speed for each of the motors and then tell each of the
+   * motors to run. 
+   */
+
+  // First, we set the speed of the motors. 
   L_MOTOR->setSpeed(currentSpeed);
   R_MOTOR->setSpeed(currentSpeed);
-  
+
+
+  // Then we check the sensors. If both the left & the 
   if((analogRead(A1) > lineThreshold) && (analogRead(A2) > lineThreshold)){
     //don't see no line at all
     L_MOTOR->run(FORWARD);
     R_MOTOR->run(FORWARD);
     lineDetectedFlag = false; 
   }
+  
   else if((analogRead(A1) < lineThreshold) && (analogRead(A2) > lineThreshold)){
     //leftSensor detects line
     L_MOTOR->run(RELEASE);
     R_MOTOR->run(FORWARD);
     lineDetectedFlag = true; 
   }
+  
   else if((analogRead(A1) > lineThreshold) && (analogRead(A2) < lineThreshold)){
     //rightSensor detects line
     L_MOTOR->run(FORWARD);
     R_MOTOR->run(RELEASE);
     lineDetectedFlag = true; 
   }
+  
   else{
     //both see line/nothing
     L_MOTOR->run(RELEASE);
@@ -78,6 +99,5 @@ void loop() {
     if(currentSpeed < maxSpeed){ //if we're going slower than max speed
       currentSpeed += 1; //accelerate by 1 
     }
-  }
-    
+  }    
 }
