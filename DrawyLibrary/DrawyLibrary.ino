@@ -1,4 +1,4 @@
-/*
+o/*
  * This example code has been written by Edwin Fallwell + Matt Neer 
  * for the Monroe County Public Library in Bloomington, IN.
  * 
