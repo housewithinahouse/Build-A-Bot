@@ -26,6 +26,8 @@ int lineThreshold = 0; //set to something a little more logical. Testing will de
 bool lineDetectedFlag = false;
 
 void setup() {
+  AFMS.begin();  // create with the default frequency 1.6KHz
+  
  // turn on motors
   L_MOTOR->setSpeed(0);
   L_MOTOR->run(RELEASE);

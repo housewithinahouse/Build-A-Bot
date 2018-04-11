@@ -25,7 +25,9 @@ int rightSensor = A1;
 
 
 void setup() {
- // turn on motors
+ AFMS.begin();  // create with the default frequency 1.6KHz
+  
+  // turn on motors
   L_MOTOR->setSpeed(60);
   L_MOTOR->run(RELEASE);
 
