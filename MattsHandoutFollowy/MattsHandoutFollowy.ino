@@ -16,13 +16,13 @@ Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_DCMotor *L_MOTOR = AFMS.getMotor(3);
 Adafruit_DCMotor *R_MOTOR = AFMS.getMotor(4);
 
-// Create names for each sensor
+// Create names for each sensor 
 int leftSensor = A0;
 int rightSensor = A1;
 
 //Create names for each sensor's LED
-int leftLED = 2;
-int rightLED = 1;
+int leftLED = 20;
+int rightLED = 21;
 
 // Create variables to store sensor readings
 int rightSide, leftSide; 
