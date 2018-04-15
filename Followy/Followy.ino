@@ -33,11 +33,14 @@ int defaultSpeed = 60;
 // threshold that determines if the reading we are getting from the sensor is detecting a line, and 
 // a special type of variable called a boolean, which stores either the value true or false. We are using
 // this to store the state of if the line has been detected. 
-int lineThreshold = 0; //this set to something a little more logical. Testing will decide. 
+int lineThreshold = 1022; //this set to something a little more logical. Testing will decide. 
 bool lineDetectedFlag = false;
 
-<<<<<<< HEAD
 void setup() {
+  /*  board first boots up. In this sketch, we need to 
+  *  do two things, initalize the AFMS object + set the 
+  *  currentSpeed to the defaultSpeed. 
+  */  
   AFMS.begin();  // create with the default frequency 1.6KHz
   
  // turn on motors
@@ -47,17 +50,10 @@ void setup() {
   R_MOTOR->setSpeed(0);
   R_MOTOR->run(RELEASE);
 
-  // set the current speed to default. 
-=======
-void setup() {  
-   /* The setup section of your code runs once, when the 
-  *  board first boots up. In this sketch, we need to 
-  *  do two things, initalize the AFMS object + set the 
-  *  currentSpeed to the defaultSpeed. 
-  */  
-  AFMS.begin();
->>>>>>> 0ed6d8b3675b0643b9c27211a973142feaac65e0
   currentSpeed = defaultSpeed;
+  // set the current speed to default. 
+
+  Serial.begin(9600);
 }
 
 void loop() {
@@ -67,6 +63,8 @@ void loop() {
    * speed for each of the motors and then tell each of the
    * motors to run. 
    */
+     Serial.println(analogRead(A1));
+  Serial.println(analogRead(A2));
 
   // First, we set the speed of the motors. 
   L_MOTOR->setSpeed(currentSpeed);
@@ -74,21 +72,21 @@ void loop() {
 
 
   // Then we check the sensors. If both the left & the 
-  if((analogRead(A1) > lineThreshold) && (analogRead(A2) > lineThreshold)){
+  if((analogRead(A1) < lineThreshold) && (analogRead(A2) <lineThreshold)){
     //don't see no line at all
     L_MOTOR->run(FORWARD);
     R_MOTOR->run(FORWARD);
     lineDetectedFlag = false; 
   }
   
-  else if((analogRead(A1) < lineThreshold) && (analogRead(A2) > lineThreshold)){
+  else if((analogRead(A1) > lineThreshold) && (analogRead(A2) < lineThreshold)){
     //leftSensor detects line
     L_MOTOR->run(RELEASE);
     R_MOTOR->run(FORWARD);
     lineDetectedFlag = true; 
   }
   
-  else if((analogRead(A1) > lineThreshold) && (analogRead(A2) < lineThreshold)){
+  else if((analogRead(A1) < lineThreshold) && (analogRead(A2) > lineThreshold)){
     //rightSensor detects line
     L_MOTOR->run(FORWARD);
     R_MOTOR->run(RELEASE);
