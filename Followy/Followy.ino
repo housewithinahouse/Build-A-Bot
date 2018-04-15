@@ -21,6 +21,11 @@ Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_DCMotor *L_MOTOR = AFMS.getMotor(3);
 Adafruit_DCMotor *R_MOTOR = AFMS.getMotor(4);
 
+
+// Sensors
+int leftSensor = A2;
+int rightSensor = A1;
+
 // This time, we're going to adjust our speed over time, so we need some variables to hold this
 // information. We've got three valuse here to store our current speed, our maximum speed, 
 // and our default speed. Each of these has been set up with an inital value that I found to work 
@@ -33,7 +38,7 @@ int defaultSpeed = 60;
 // threshold that determines if the reading we are getting from the sensor is detecting a line, and 
 // a special type of variable called a boolean, which stores either the value true or false. We are using
 // this to store the state of if the line has been detected. 
-int lineThreshold = 1022; //this set to something a little more logical. Testing will decide. 
+int lineThreshold = 400; //this set to something a little more logical. Testing will decide. 
 bool lineDetectedFlag = false;
 
 void setup() {
@@ -63,33 +68,31 @@ void loop() {
    * speed for each of the motors and then tell each of the
    * motors to run. 
    */
-     Serial.println(analogRead(A1));
-  Serial.println(analogRead(A2));
-
+  
   // First, we set the speed of the motors. 
   L_MOTOR->setSpeed(currentSpeed);
   R_MOTOR->setSpeed(currentSpeed);
 
 
   // Then we check the sensors. If both the left & the 
-  if((analogRead(A1) < lineThreshold) && (analogRead(A2) <lineThreshold)){
+  if((analogRead(rightSensor) < lineThreshold) && (analogRead(leftSensor) < lineThreshold)){
     //don't see no line at all
     L_MOTOR->run(FORWARD);
     R_MOTOR->run(FORWARD);
     lineDetectedFlag = false; 
   }
   
-  else if((analogRead(A1) > lineThreshold) && (analogRead(A2) < lineThreshold)){
+  else if((analogRead(rightSensor) < lineThreshold) && (analogRead(leftSensor) > lineThreshold)){
     //leftSensor detects line
-    L_MOTOR->run(RELEASE);
+    L_MOTOR->run(BACKWARD);
     R_MOTOR->run(FORWARD);
     lineDetectedFlag = true; 
   }
   
-  else if((analogRead(A1) < lineThreshold) && (analogRead(A2) > lineThreshold)){
+  else if((analogRead(rightSensor) > lineThreshold) && (analogRead(leftSensor) < lineThreshold)){
     //rightSensor detects line
     L_MOTOR->run(FORWARD);
-    R_MOTOR->run(RELEASE);
+    R_MOTOR->run(BACKWARD);
     lineDetectedFlag = true; 
   }
   
@@ -104,12 +107,17 @@ void loop() {
    * over shooting the line.
    */
   
-  if(lineDetectedFlag){ //if we've detected a line
-    currentSpeed = defaultSpeed; //slow back down
-  }
-  else{
-    if(currentSpeed < maxSpeed){ //if we're going slower than max speed
-      currentSpeed += 1; //accelerate by 1 
-    }
-  }    
+//  if(lineDetectedFlag){ //if we've detected a line
+//    currentSpeed = defaultSpeed; //slow back down
+//  }
+//  else{
+//    if(currentSpeed < maxSpeed){ //if we're going slower than max speed
+//      currentSpeed += 1; //accelerate by 1 
+//    }
+//  } 
+
+//  Serial.print("right: ");
+//  Serial.println(analogRead(rightSensor));
+//  Serial.print("left: ");
+//  Serial.println(analogRead(leftSensor));
 }
