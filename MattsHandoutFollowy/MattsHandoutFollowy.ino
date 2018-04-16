@@ -26,7 +26,7 @@ int rightSensor = A1;
 int rightSide, leftSide; 
 
 void setup() {
- AFMS.begin();  // create with the default frequency 1.6KHz
+  AFMS.begin();  // create with the default frequency 1.6KHz
   Serial.begin(9600);
   // turn on motors
   L_MOTOR->setSpeed(50);
@@ -45,7 +45,7 @@ void loop() {
  //write value of left and right side to readings of each sensor 
   leftSide = analogRead(leftSensor);
   rightSide = analogRead(rightSensor);
- Serial.print("right: ");
+  Serial.print("right: ");
   Serial.println(analogRead(rightSensor));
   Serial.print("left: ");
   Serial.println(analogRead(leftSensor));
