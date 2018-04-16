@@ -17,21 +17,19 @@ Adafruit_DCMotor *L_MOTOR = AFMS.getMotor(3);
 Adafruit_DCMotor *R_MOTOR = AFMS.getMotor(4);
 
 // Create names for each sensor 
-int leftSensor = A0;
+int leftSensor = A2;
 int rightSensor = A1;
 
-//Create names for each sensor's LED
-int leftLED = 20;
-int rightLED = 21;
+
 
 // Create variables to store sensor readings
 int rightSide, leftSide; 
 
 void setup() {
  AFMS.begin();  // create with the default frequency 1.6KHz
-  
+  Serial.begin(9600);
   // turn on motors
-  L_MOTOR->setSpeed(60);
+  L_MOTOR->setSpeed(50);
   L_MOTOR->run(RELEASE);
 
   R_MOTOR->setSpeed(60);
@@ -41,31 +39,28 @@ void setup() {
   pinMode(leftSensor, INPUT);
   pinMode(rightSensor, INPUT);
  
- //set LEDs to receive commands from Feather
-  pinMode(leftLED, OUTPUT);
-  pinMode(rightLED, OUTPUT);
- 
- //turn on LEDs
-  digitalWrite(leftLED, HIGH);
-  digitalWrite(rightLED, HIGH);
 }
 
 void loop() {
  //write value of left and right side to readings of each sensor 
   leftSide = analogRead(leftSensor);
   rightSide = analogRead(rightSensor);
- 
+ Serial.print("right: ");
+  Serial.println(analogRead(rightSensor));
+  Serial.print("left: ");
+  Serial.println(analogRead(leftSensor));
+  delay(100);
  //test to see which sensor is over the line
  //then turn the opposite wheel to keep the line centered
     if(leftSide > rightSide){
       L_MOTOR->run(RELEASE);
       R_MOTOR->run(FORWARD);
-      delay(30);
+//      delay(100);
     }
 
     if(rightSide > leftSide){
       L_MOTOR->run(FORWARD);
       R_MOTOR->run(RELEASE);
-      delay(30);
+//      delay(100);
     }
 }
