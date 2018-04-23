@@ -27,7 +27,6 @@ int rightSide, leftSide;
 
 void setup() {
   AFMS.begin();  // create with the default frequency 1.6KHz
-  Serial.begin(9600);
   // turn on motors
   L_MOTOR->setSpeed(50);
   L_MOTOR->run(RELEASE);
@@ -45,11 +44,6 @@ void loop() {
  //write value of left and right side to readings of each sensor 
   leftSide = analogRead(leftSensor);
   rightSide = analogRead(rightSensor);
-  Serial.print("right: ");
-  Serial.println(analogRead(rightSensor));
-  Serial.print("left: ");
-  Serial.println(analogRead(leftSensor));
-  delay(100);
  //test to see which sensor is over the line
  //then turn the opposite wheel to keep the line centered
     if(leftSide > rightSide){
