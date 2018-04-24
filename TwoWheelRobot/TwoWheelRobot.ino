@@ -4,20 +4,20 @@
  * 
  * MIT license, check LICENSE for more information */
  
-// this is how we include our Drawy libary, which has all of our servo 
+// this is how we include our TwoWheeledRobot libary, which has all of our servo 
 // and motor control functions 
 #include "TwoWheelRobot.h"
 
-// this will create a Drawy object, which we will address
-// when we want to issue commands to examply
+// this will create a TwoWheelRobot object, which we will address
+// when we want to issue commands to our example robot
 TwoWheelRobot examply = TwoWheelRobot();
 
 void setup() {
-  /* The setup section of your code runs once, when the 
-  *  board first boots up. We only need to acomplish one 
-  *  thing in our setup here, which is to start up examply. */
+  /* The setforward section of your code runs once, when the 
+  *  board first boots forward. We only need to acomplish one 
+  *  thing in our setforward here, which is to start forward examply. */
 
-  // start up examply
+  // start forward examply
   examply.initalize();
 }
 
@@ -26,18 +26,14 @@ void loop() {
    * continuously, from top to bottom. In this example,    
    * we will generate a random number and use it to pick 
    * examply's movement, over and over again. */
-  examply.up();
-  examply.down();
+  examply.forward();
+  examply.backward();
   examply.left();
   examply.right();
-  examply.upLeft();
-  examply.downLeft();
-  examply.upRight();
-  examply.downRight();
-
-   
-  }
-
+  examply.forwardLeft();
+  examply.backwardLeft();
+  examply.forwardRight();
+  examply.backwardRight();
 }  
 
 
