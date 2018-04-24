@@ -25,7 +25,6 @@ class TwoWheelRobot
 {
   private:
     Adafruit_MotorShield _AFMS = Adafruit_MotorShield();;  
-    Servo _servo;
     Adafruit_DCMotor *_L_MOTOR = _AFMS.getMotor(3);
     Adafruit_DCMotor *_R_MOTOR = _AFMS.getMotor(4);
     int _l_speed;
@@ -45,6 +44,9 @@ class TwoWheelRobot
     void backwardLeft(int segment_length = _default_segment_length);
     void forwardRight(int segment_length = _default_segment_length);
     void backwardRight(int segment_length = _default_segment_length);
+    void speedUp();
+    void slowDown();
+    void setSpeed(int newSpeed);
 };
 
 #endif //this is the end of the "if the classes are not defined then define them" wrapper we put up at the begining. 

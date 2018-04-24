@@ -46,6 +46,7 @@ void TwoWheelRobot::_go(uint8_t l_cmd, uint8_t r_cmd)
   _R_MOTOR->run(r_cmd);
 }
 
+
 // Basic movements
 void TwoWheelRobot::forward(int segment_length = _default_segment_length) 
 {
@@ -101,5 +102,38 @@ void TwoWheelRobot::forwardLeft(int segment_length = _default_segment_length)
   _go(FORWARD, RELEASE);
   delay(segment_length);
   _stop();
+}
+
+
+// Speed Control
+
+void TwoWheelRobot::speedUp() 
+{
+  _l_speed += 1;
+  _r_speed += 1;
+  if (_l_speed > 255){
+    _l_speed = 255; 
+  }
+  if (_r_speed > 255){
+    _r_speed = 255; 
+  }
+}
+
+void TwoWheelRobot::slowDown() 
+{
+  _l_speed -= 1;
+  _r_speed -= 1;
+  if (_l_speed < 0){
+    _l_speed = 0; 
+  }
+  if (_r_speed < 0){
+    _r_speed = 0; 
+  }
+}
+
+void TwoWheelRobot::setSpeed(int newSpeed)
+{
+  newSpeed = min(max(newSpeed,0),255); // keeps speed in between 0 + 255. 
+  _l_speed = _r_speed = newSpeed;
 }
 

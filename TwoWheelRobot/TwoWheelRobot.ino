@@ -17,15 +17,20 @@ void setup() {
   *  board first boots forward. We only need to acomplish one 
   *  thing in our setforward here, which is to start forward examply. */
 
-  // start forward examply
+  // start up examply
   examply.initalize();
+
+  
+  // and tell it to hold on so it doesn't run away as soon as its uploaded. 
+  delay(500);
 }
 
 void loop() {
   /* The loop section of your code will be run through 
    * continuously, from top to bottom. In this example,    
-   * we will generate a random number and use it to pick 
-   * examply's movement, over and over again. */
+   * we give a bunch of examples of what it can do. */
+  
+  // these are all of the things that our TwoWheelRobot object can do:
   examply.forward();
   examply.backward();
   examply.left();
@@ -34,6 +39,17 @@ void loop() {
   examply.backwardLeft();
   examply.forwardRight();
   examply.backwardRight();
+
+
+  //  you can specifiy how long each command runs: 
+  examply.forward(1);
+  examply.left(300);
+
+  // the speed of the robot can be adjusted:
+  examply.speedUp();
+  examply.slowDown();
+
+ 
 }  
 
 
