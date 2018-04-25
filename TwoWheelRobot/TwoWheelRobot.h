@@ -31,11 +31,13 @@ class TwoWheelRobot
     int _r_speed;
     static int _default_segment_length;
     int _default_pause_length;
+    int currentMovementMode;
     void _stop();
     void _go(uint8_t l_cmd, uint8_t r_cmd);
   public: 
     TwoWheelRobot();
     void initalize();
+    void setMovementMode(int newMovementMode);
     void forward(int segment_length = _default_segment_length);
     void backward(int segment_length = _default_segment_length);
     void left(int segment_length = _default_segment_length);
@@ -44,6 +46,7 @@ class TwoWheelRobot
     void backwardLeft(int segment_length = _default_segment_length);
     void forwardRight(int segment_length = _default_segment_length);
     void backwardRight(int segment_length = _default_segment_length);
+    void stop();
     void speedUp();
     void slowDown();
     void setSpeed(int newSpeed);

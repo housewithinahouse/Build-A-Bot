@@ -16,6 +16,9 @@ TwoWheelRobot::TwoWheelRobot()
 
   // Delay Lengths
   _default_pause_length = 50;
+
+  // Default to DISCRETE movement mode
+  setMovementMode(1);
 }
 
 void TwoWheelRobot::initalize(){
@@ -28,6 +31,11 @@ void TwoWheelRobot::initalize(){
 
   _R_MOTOR->setSpeed(0);
   _R_MOTOR->run(RELEASE);
+}
+
+void TwoWheelRobot::setMovementMode(int newMovementMode)
+{
+  currentMovementMode = newMovementMode; 
 }
 
 // Movement building blocks
@@ -52,55 +60,75 @@ void TwoWheelRobot::forward(int segment_length = _default_segment_length)
 {
   _go(FORWARD, FORWARD);
   delay(segment_length);
-  _stop();
+  if(currentMovementMode = 1){
+    _stop();
+  }
 }
 
 void TwoWheelRobot::backward(int segment_length = _default_segment_length) 
 {
   _go(BACKWARD, BACKWARD);
   delay(segment_length);
-  _stop();
+  if(currentMovementMode = 1){
+    _stop();
+  }
 }
 
 void TwoWheelRobot::right(int segment_length = _default_segment_length) 
 {
   _go(FORWARD, BACKWARD);
   delay(segment_length);
-  _stop();
+  if(currentMovementMode = 1){
+    _stop();
+  }
 }
 
 void TwoWheelRobot::left(int segment_length = _default_segment_length) 
 {
   _go(BACKWARD, FORWARD);
   delay(segment_length);
-  _stop();
+  if(currentMovementMode = 1){
+    _stop();
+  }
 }
 
 void TwoWheelRobot::backwardRight(int segment_length = _default_segment_length) 
 {
   _go(RELEASE, BACKWARD);
   delay(segment_length);
-  _stop();
+  if(currentMovementMode = 1){
+    _stop();
+  }
 }
 
 void TwoWheelRobot::forwardRight(int segment_length = _default_segment_length) 
 {
   _go(RELEASE, FORWARD);
   delay(segment_length);
-  _stop();
+  if(currentMovementMode = 1){
+    _stop();
+  }
 }
 
 void TwoWheelRobot::backwardLeft(int segment_length = _default_segment_length) 
 {
   _go(BACKWARD, RELEASE);
   delay(segment_length);
-  _stop();
+  if(currentMovementMode = 1){
+    _stop();
+  }
 }
 
 void TwoWheelRobot::forwardLeft(int segment_length = _default_segment_length) 
 {
   _go(FORWARD, RELEASE);
   delay(segment_length);
+  if(currentMovementMode = 1){
+    _stop();
+  }
+}
+
+void TwoWheelRobot::stop(){
   _stop();
 }
 

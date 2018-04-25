@@ -17,11 +17,12 @@ void setup() {
   *  board first boots forward. We only need to acomplish one 
   *  thing in our setforward here, which is to start forward examply. */
 
-  // start up examply
+  // start up the two wheel robot library
   examply.initalize();
 
   
-  // and tell it to hold on so it doesn't run away as soon as its uploaded. 
+  // and tell therobot to hold on for a little bit
+  // so it doesn't run away as soon as its uploaded. 
   delay(500);
 }
 
@@ -30,7 +31,7 @@ void loop() {
    * continuously, from top to bottom. In this example,    
    * we give a bunch of examples of what it can do. */
   
-  // these are all of the things that our TwoWheelRobot object can do:
+  // these are all of the moves that our TwoWheelRobot object can do:
   examply.forward();
   examply.backward();
   examply.left();
@@ -40,7 +41,6 @@ void loop() {
   examply.forwardRight();
   examply.backwardRight();
 
-
   //  you can specifiy how long each command runs: 
   examply.forward(1);
   examply.left(300);
@@ -48,6 +48,27 @@ void loop() {
   // the speed of the robot can be adjusted:
   examply.speedUp();
   examply.slowDown();
+
+  // or be set directly
+  examply.setSpeed(60);
+
+  //there are 2 different movement modes for our Two Wheel Robot object: 
+  examply.setMovementMode(2); //continous
+  examply.setMovementMode(1); //discrete
+
+  
+  // in continous mode, stop commands must be explicitly made:
+  examply.setMovementMode(2);
+  examply.forward(50);
+  examply.backward(50);
+  examply.stop(); 
+
+  // in discrete mode, stop commands implicitly are added after each movment c:
+  examply.setMovementMode(1);
+  examply.forward(50);
+               //stops
+  examply.backward(50);
+               //stops
 
  
 }  
