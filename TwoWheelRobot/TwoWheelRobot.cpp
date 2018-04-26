@@ -36,6 +36,9 @@ void TwoWheelRobot::initalize(){
 void TwoWheelRobot::setMovementMode(int newMovementMode)
 {
   currentMovementMode = newMovementMode; 
+  if (currentMovementMode = 2){
+    _default_segment_length = 1;
+  }
 }
 
 // Movement building blocks

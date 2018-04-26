@@ -59,8 +59,10 @@ void loop() {
   
   // in continous mode, stop commands must be explicitly made:
   examply.setMovementMode(2);
-  examply.forward(50);
-  examply.backward(50);
+  examply.forward();
+  delay(100);
+  examply.backward();
+  delay(100);
   examply.stop(); 
 
   // in discrete mode, stop commands implicitly are added after each movment c:
@@ -72,6 +74,46 @@ void loop() {
 
  
 }  
+
+void moveForwardUntilSwitchHitThenCircleBackAndStartAllOver(){
+  // the name of the function is pretty self explanatory, but
+  // yeah, lets use our TwoWheelRobot library to do just that 
+  // (this is the core of the first flashligh robot. 
+  examply.setMovementMode(2);//have it move until being told to stop
+ 
+  //create a var to hold our "have I hit something?" state
+  bool hasHitSomething = false;
+
+  //and run a loop that will drive forward, looking for something
+  while(!hasHitSomething){
+    examply.forward();
+
+    // if it hits something...
+    if(hitSomething()){
+      hasHitSomething = true;
+    }
+  }
+  
+  // then back up for a bit and start over again
+  examply.backwardLeft();
+  delay(300);  
+
+}
+
+// to check if we hit something:
+bool hitSomething(){
+
+  // hook up a switch to a digital pin
+  int bumpSensor = 19; //or whatever
+  pinMode(bumpSensor, INPUT);
+  
+  if (digitalRead(bumpSensor == HIGH)){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
 
 
 
