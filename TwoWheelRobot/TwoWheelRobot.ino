@@ -88,7 +88,7 @@ void moveForwardUntilSwitchHitThenCircleBackAndStartAllOver(){
   while(!hasHitSomething){
     examply.forward();
 
-    // if it hits something...
+    // and if it hits something...
     if(hitSomething()){
       hasHitSomething = true;
     }
@@ -102,12 +102,13 @@ void moveForwardUntilSwitchHitThenCircleBackAndStartAllOver(){
 
 // to check if we hit something:
 bool hitSomething(){
-
-  // hook up a switch to a digital pin
+  // hook up a switch to a digital pin and +v
   int bumpSensor = 19; //or whatever
+  //turn it to input
   pinMode(bumpSensor, INPUT);
   
-  if (digitalRead(bumpSensor == HIGH)){
+  // if it ever goes high (cuz it bumped something)
+  if (digitalRead(bumpSensor) == HIGH){
     return true;
   }
   else{
