@@ -13,7 +13,7 @@
 TwoWheelRobot examply = TwoWheelRobot();
 
 void setup() {
-  /* The setforward section of your code runs once, when the 
+  /* The setup section of your code runs once, when the 
   *  board first boots forward. We only need to acomplish one 
   *  thing in our setforward here, which is to start forward examply. */
 
@@ -21,8 +21,8 @@ void setup() {
   examply.initalize();
 
   
-  // and tell therobot to hold on for a little bit
-  // so it doesn't run away as soon as its uploaded. 
+  // and tell the robot to hold on for a little bit
+  // (so it doesn't run away as soon as its code is uploaded.) 
   delay(500);
 }
 
@@ -81,26 +81,26 @@ void moveForwardUntilSwitchHitThenCircleBackAndStartAllOver(){
   // (this is the core of the first flashligh robot. 
   examply.setMovementMode(2);//have it move until being told to stop
  
-  //create a var to hold our "have I hit something?" state
+  // create a var to hold our "have I hit something?" state
   bool hasHitSomething = false;
 
-  //and run a loop that will drive forward, looking for something
+  // and run a loop that will drive forward, looking for something
+  // this while loop will continue to run forever
   while(!hasHitSomething){
     examply.forward();
 
-    // and if it hits something...
+    // unless it hits something...
     if(hitSomething()){
       hasHitSomething = true;
     }
   }
   
-  // then back up for a bit and start over again
+  // then it will back up for a bit and start over again
   examply.backwardLeft();
   delay(300);  
-
 }
 
-// to check if we hit something:
+// this is how we check if we hit something:
 bool hitSomething(){
   // hook up a switch to a digital pin and +v
   int bumpSensor = 19; //or whatever
@@ -116,7 +116,64 @@ bool hitSomething(){
   }
 }
 
+// ***********- BUILD A BOT III -*******************// 
+// for our Build a Bot III, we'll use the 
+// "check to see if something has hit it" 
+// bits, but also reuse some of our line detection
 
+
+bool leftSensorSeesLine = false;
+bool rightSensorSeesLine = false;
+int leftSensorPin = A0;
+int rightSensorPin = A1; 
+int lineThreshold = 600; // number derived from testing
+
+void lookForLinesifFoundStayThereAndWaitForSomethingToBumpYou(){ 
+  
+  checkEachSensor();
+  
+  if(leftSensorSeesLine && rightSensorSeesLine){
+    examply.stop();
+  }      
+  else if(rightSensorSeesLine){
+    examply.right();
+  }
+  else if(leftSensorSeesLine){
+    examply.left();
+  }
+  else{
+    wanderRandomly();
+  }
+
+  if(somethingBumpsYou()){
+    freakOut();
+  }
+  
+}
+
+void checkEachSensor(){
+  if(analogRead(leftSensorPin))) > linethreshold){
+    leftSensorSeesLine = true;
+  }
+  else{
+    leftSensorSeesLine = false;
+  }
+  
+  if(analogRead(rightSensorPin)) > linethreshold){
+    rightSensorSeesLine = true;
+  }
+  else{
+    rightSeensorSeesLine = false;
+  }
+}
+
+bool somethingBumpsYou(){
+  return true;
+}
+
+void freakOut(){
+  examply.left(300);
+}
 
 
 
