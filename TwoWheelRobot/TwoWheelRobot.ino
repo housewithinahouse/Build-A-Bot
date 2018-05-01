@@ -124,16 +124,21 @@ bool hitSomething(){
 
 bool leftSensorSeesLine = false;
 bool rightSensorSeesLine = false;
+bool foundALine = false;
 int leftSensorPin = A0;
 int rightSensorPin = A1; 
+int leftBumperPin = 20;
+int rightBumperPin = 21;
 int lineThreshold = 600; // number derived from testing
 
 void lookForLinesifFoundStayThereAndWaitForSomethingToBumpYou(){ 
-  
+  // check the sensors, if either sensor sees a line, try to get the other sensor
+  // also be over that line. If no lines found,  
   checkEachSensor();
   
   if(leftSensorSeesLine && rightSensorSeesLine){
     examply.stop();
+    foundALine = true;
   }      
   else if(rightSensorSeesLine){
     examply.right();
@@ -141,39 +146,66 @@ void lookForLinesifFoundStayThereAndWaitForSomethingToBumpYou(){
   else if(leftSensorSeesLine){
     examply.left();
   }
+  else if(foundALine){
+    examply.stop();
+  }
   else{
     wanderRandomly();
   }
 
   if(somethingBumpsYou()){
     freakOut();
-  }
-  
+    foundALine = false;
+  }  
 }
 
 void checkEachSensor(){
-  if(analogRead(leftSensorPin))) > linethreshold){
+  // updates the vars: leftSensorSeesLine + rightSensorSeesLine
+    
+  if((analogRead(leftSensorPin)) > lineThreshold){
     leftSensorSeesLine = true;
   }
   else{
     leftSensorSeesLine = false;
   }
   
-  if(analogRead(rightSensorPin)) > linethreshold){
+  if((analogRead(rightSensorPin)) > lineThreshold){
     rightSensorSeesLine = true;
   }
   else{
-    rightSeensorSeesLine = false;
+    rightSensorSeesLine = false;
   }
 }
 
+void wanderRandomly(){
+  // issues a series of random commands to our robot
+    
+  examply.forward(); //TODO: replace with actually random movement
+}
+
 bool somethingBumpsYou(){
-  return true;
+  // returns true if either bumper is hit
+
+  // turn the pins into inputs
+  pinMode(leftBumperPin, INPUT);
+  pinMode(rightBumperPin, INPUT);
+
+  // check to see if either one goes high  
+  if((digitalRead(leftBumperPin) == HIGH)||(digitalRead(rightBumperPin)) == HIGH){
+    return true;
+  }
+  else{
+    return false;
+  }
 }
 
 void freakOut(){
-  examply.left(300);
+  // preforms a crazy chaotic series of moves
+    
+  examply.left(300); //TODO: replace with more interesting actions
 }
+
+
 
 
 
