@@ -4,7 +4,6 @@ int leftSensor = A2;
 void setup()
 {
   Serial.begin(9600);
-  Serial.println("Adafruit Bluefruit Robot Controller Example");
   pinMode(rightSensor, INPUT);
   pinMode(leftSensor, INPUT);
 }
@@ -15,5 +14,5 @@ void loop() {
   Serial.println(analogRead(rightSensor));
   Serial.print("left: ");
   Serial.println(analogRead(leftSensor));
-  delay(100);
+  delay(1000);
 }
