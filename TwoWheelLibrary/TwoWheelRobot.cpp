@@ -167,4 +167,3 @@ void TwoWheelRobot::setSpeed(int newSpeed)
   newSpeed = min(max(newSpeed,0),255); // keeps speed in between 0 + 255. 
   _l_speed = _r_speed = newSpeed;
 }
-
