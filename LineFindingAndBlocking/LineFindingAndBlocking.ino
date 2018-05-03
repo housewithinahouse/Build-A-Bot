@@ -10,7 +10,7 @@
 
 // create a TwoWheelRobot object, which we will address
 // when we want to issue commands to our example robot
-TwoWheelRobot examply = TwoWheelRobot();
+TwoWheelRobot blocky = TwoWheelRobot();
 
 bool leftSensorSeesLine = false;
 bool rightSensorSeesLine = false;
@@ -24,11 +24,11 @@ int lineThreshold = 600; // number derived from testing
 void setup() {
   /* The setup section of your code runs once, when the 
   *  board first boots forward. We only need to acomplish one 
-  *  thing in our setforward here, which is to start forward examply. */
+  *  thing in our setforward here, which is to start forward blocky. */
 
   // start up the two wheel robot library
-  examply.initalize();
-  examply.setMovementMode(2);
+  blocky.initalize();
+  blocky.setMovementMode(2);
 
   
   // and tell the robot to hold on for a little bit
@@ -42,17 +42,17 @@ void loop() {
   checkEachSensor();
   
   if(leftSensorSeesLine && rightSensorSeesLine){
-    examply.stop();
+    blocky.stop();
     foundALine = true;
   }      
   else if(rightSensorSeesLine){
-    examply.right();
+    blocky.right();
   }
   else if(leftSensorSeesLine){
-    examply.left();
+    blocky.left();
   }
   else if(foundALine){
-    examply.stop();
+    blocky.stop();
   }
   else{
     wanderRandomly();
@@ -86,7 +86,7 @@ void checkEachSensor(){
 void wanderRandomly(){
   // issues a series of random commands to our robot
     
-  examply.forward(); //TODO: replace with actually random movement
+  blocky.forward(); //TODO: replace with actually random movement
 }
 
 bool somethingBumpsYou(){
@@ -106,9 +106,8 @@ bool somethingBumpsYou(){
 }
 
 void freakOut(){
-  // preforms a crazy chaotic series of moves
-    
-  examply.left(300); //TODO: replace with more interesting actions
+  // preforms a crazy chaotic series of moves    
+  blocky.left(300); //TODO: replace with more interesting actions
 }
 
 
