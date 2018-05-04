@@ -1,4 +1,4 @@
-This project (Drawy) was created for MCPL in Bloomington, IN by Edwin Fallwell and Matt Neer in 2018. 
+This code base was created for MCPL in Bloomington, IN by Edwin Fallwell and Matt Neer in 2018. 
 
 Robot platform is from the Adafruit Adabox002 Kit. 
 
