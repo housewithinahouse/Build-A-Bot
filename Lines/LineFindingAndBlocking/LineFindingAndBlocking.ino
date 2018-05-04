@@ -38,7 +38,10 @@ void setup() {
 
 void loop() {
   // check the sensors, if either sensor sees a line, try to get the other sensor
-  // also be over that line. If no lines found,  
+  // also be over that line. If no lines found, wander around aimlessly. If it does 
+  // find a line, sit there, waiting for something to bump into you. If you are bumped
+  // freak out, and then go back to wandering, looking for a new line. 
+
   checkEachSensor();
   
   if(leftSensorSeesLine && rightSensorSeesLine){
