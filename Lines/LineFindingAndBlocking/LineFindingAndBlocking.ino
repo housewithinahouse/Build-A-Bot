@@ -89,7 +89,7 @@ void checkEachSensor(){
 void wanderRandomly(){
   // issues a series of random commands to our robot
     
-  blocky.forward(); //TODO: replace with actually random movement
+  blocky.forward(100); //TODO: replace with actually random movement
 }
 
 bool somethingBumpsYou(){
@@ -110,7 +110,8 @@ bool somethingBumpsYou(){
 
 void freakOut(){
   // preforms a crazy chaotic series of moves    
-  blocky.left(300); //TODO: replace with more interesting actions
+  blocky.backward(400);
+  blocky.left(1100); //TODO: replace with more interesting actions
 }
 
 
