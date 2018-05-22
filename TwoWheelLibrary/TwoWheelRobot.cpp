@@ -17,8 +17,8 @@ TwoWheelRobot::TwoWheelRobot()
   // Delay Lengths
   _default_pause_length = 50;
 
-  // Default to DISCRETE movement mode
-  setMovementMode(1);
+  // Default to Continous movement mode
+  setMovementMode(2);
 }
 
 void TwoWheelRobot::initalize(){

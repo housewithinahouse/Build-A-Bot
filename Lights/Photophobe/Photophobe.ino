@@ -20,22 +20,13 @@ int rightSensorLightLevel = 0;
 void setup() {
   // start up the two wheel robot library
   photophobe.initalize();
-  photophobe.setMovementMode(2);
-
-  
-  // and tell the robot to hold on for a little bit
-  // (so it doesn't run away as soon as its code is uploaded.) 
-  delay(500);
 }
 
 void loop() {
 
   checkLightSensors();
-  
-  if(leftSensorLightLevel == rightSensorLightLevel){
-    photophobe.forward();
-  }      
-  else if(leftSensorLightLevel > rightSensorLightLevel){
+
+  if(leftSensorLightLevel > rightSensorLightLevel){
     photophobe.forwardRight();
   }
   else if(leftSensorLightLevel < rightSensorLightLevel){
