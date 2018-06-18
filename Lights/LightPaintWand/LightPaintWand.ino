@@ -1,13 +1,13 @@
 
 //Light Painting Wand
 
-//This is a light painting wand.
+//This is the code for our light painting wand.
 
 void setup() {
   // during the setup, we need to tell our code how many LEDs there
-  // are and set those leds brightness
+  // are and set those LEDs brightness
   addLEDs(6);
-  setLEDBrightness(50);
+  setLEDBrightness(50); // out of 100
 }
 
 void loop(){
@@ -20,13 +20,13 @@ void loop(){
   // and our starting point on the rainbow
   int colorStart = 1; //out of 255
 
+  // cycleColors will set our LEDs to the next phase on the rainbow
+  cycleColors(colorRange,colorStart);
   
-  while(buttonPushed()){
-    cycleColors(colorRange,colorStart);
-    //addGlitter(1);
-    showColors();
-  }
-  fadeToBlack();
+  //addGlitter(1); // optional code to make glitter happen. 
+
+  // after we've set our colors, we call showColors to show them
+  showColors();  
 }
 
 
@@ -44,6 +44,7 @@ void loop(){
 
 
 //---Everything down here you don't have to worry about!
+//---This is all the stuff that actually makes it go. 
 
 
 #include "FastLED.h"
