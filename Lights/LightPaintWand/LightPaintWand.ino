@@ -1,17 +1,29 @@
 
 //Light Painting Wand
 
+//This is a light painting wand.
+
 void setup() {
+  // during the setup, we need to tell our code how many LEDs there
+  // are and set those leds brightness
   addLEDs(6);
   setLEDBrightness(50);
 }
 
 void loop(){
-  int colorRange = 255; // out of 255
-  int colorStart = 255; //out of 255
+  // the loop part of our code will run over and over again.
+  // our goal is to cycle through some subset of colors of the rainbow
+
+  //first we set what portion of the rainbow we cycle through
+  int colorRange = 1; // out of 255
+
+  // and our starting point on the rainbow
+  int colorStart = 1; //out of 255
+
+  
   while(buttonPushed()){
     cycleColors(colorRange,colorStart);
-    addGlitter(2000);
+    //addGlitter(1);
     showColors();
   }
   fadeToBlack();
