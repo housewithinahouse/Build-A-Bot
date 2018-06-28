@@ -16,6 +16,7 @@ int leftSensorPin = A0;
 int rightSensorPin = A1; 
 int leftSensorLightLevel = 0;
 int rightSensorLightLevel = 0;
+int high, low, ave = 0;
 
 void setup() {
   // start up the two wheel robot library
@@ -26,22 +27,32 @@ void setup() {
 void loop() {
 
   checkLightSensors();
+  averages();
 
-  if(leftSensorLightLevel > rightSensorLightLevel){
-    photophobe.forwardRight();
+  if(leftSensorLightLevel < high && leftSensorLightLevel > low){
+    photophobe.forward();
   }
   else if(leftSensorLightLevel < rightSensorLightLevel){
     photophobe.forwardLeft();
+  }
+  else if(leftSensorLightLevel > rightSensorLightLevel){
+    photophobe.forwardRight();
   }
 }
 
 void checkLightSensors(){
   leftSensorLightLevel = analogRead(leftSensorPin);   
-  rightSensorLightLevel = analogRead(rightSensorPin);  
-  Serial.print("left: "); 
+  rightSensorLightLevel = analogRead(rightSensorPin);
+  /* Serial.print("left: "); 
   Serial.println(leftSensorLightLevel);
   Serial.println("right: ");
   Serial.println(rightSensorLightLevel);
-  delay(100);
+  delay(100); */
+}
+
+void averages(){
+  ave = (leftSensorLightLevel + rightSensorLightLevel) / 2;
+  low = ave - 15;
+  high = ave + 15;
 }
 
