@@ -30,13 +30,13 @@ void loop() {
   averages();
 
   if(leftSensorLightLevel < high && leftSensorLightLevel > low){
-    photophobe.forward();
+    photophobe.backward();
   }
   else if(leftSensorLightLevel < rightSensorLightLevel){
-    photophobe.forwardLeft();
+    photophobe.backwardRight();
   }
   else if(leftSensorLightLevel > rightSensorLightLevel){
-    photophobe.forwardRight();
+    photophobe.backwardLeft();
   }
 }
 
@@ -52,7 +52,7 @@ void checkLightSensors(){
 
 void averages(){
   ave = (leftSensorLightLevel + rightSensorLightLevel) / 2;
-  low = ave - 15;
-  high = ave + 15;
+  low = ave - 5;
+  high = ave + 5;
 }
 
