@@ -1,6 +1,6 @@
 /*
  * This example code has been written by Edwin Fallwell 
- * for the Monroe County Public Library in Bloomington, IN.
+ * & Matt Neer for the Monroe County Public Library in Bloomington, IN.
  * 
  * MIT license, check LICENSE for more information */
 
@@ -21,6 +21,7 @@ int high, low, ave = 0;
 void setup() {
   // start up the two wheel robot library
   photophobe.initalize();
+  photophobe.setSpeed(100);
   Serial.begin(9600);
 }
 
