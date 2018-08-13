@@ -1,8 +1,4 @@
 /** if you've not already looked at TwoWheelRobot.h before this, I'd recomend starting there... **/
-
-
-
-
 #include "Arduino.h"
 #include "TwoWheelRobot.h"
 

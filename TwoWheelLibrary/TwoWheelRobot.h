@@ -1,17 +1,15 @@
 /*
- * This example code has been written by Edwin Fallwell + Matt Neer 
+ * This library has been written by Edwin Fallwell + Matt Neer 
  * for the Monroe County Public Library in Bloomington, IN.
  * 
  * MIT license, check LICENSE for more information */
 
-// This is the TwoWheelRobot library, used to make it easier to work with our little wheeled friends. 
-// Let's go over the parts of this library and explain how they all work. 
-
-
+// This is the TwoWheelRobot library, used to make it easier to work with our little two wheeled friends. 
+// This code was designed to be used in an instructional setting. 
+// So let's go over the parts of this library and explain how they all work. 
 
 #ifndef TwoWheelRobot_h // We make this declaration in order to prevent libraries from messing up if they get included more than once. 
 #define TwoWheelRobot_h // You gotta wrap the whole thing in this #ifndef then #define (if not defined then define) statement. 
-
 
 #include "Arduino.h" // While normal .ino sketches don't have to explictly include "Arduino.h", libraries do. 
 

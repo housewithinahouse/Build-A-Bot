@@ -22,7 +22,8 @@ int leftSensorLightLevel = 0;
 int rightSensorLightLevel = 0;
 int high, low, ave = 0;
 
-bool bumped = false;
+bool bumpedLeft = false;
+bool bumpedRight = false;
 
 void setup() {
   // start up the two wheel robot library
@@ -34,6 +35,7 @@ void setup() {
 void loop() {
 
   checkLightSensors();
+  
   averages();
 
   if(leftSensorLightLevel < high && leftSensorLightLevel > low){
@@ -47,11 +49,14 @@ void loop() {
   }
 
   checkBumpSensors();
+  
   if(bumpedLeft){
-    left(150);    
+    photophobe.left(150);
+    bumpedLeft = false;    
   }
-  else if(bumpedRight){
-    right(150);
+  if(bumpedRight){
+    photophobe.right(150);
+    bumpedRight = false;
   }
 }
 
