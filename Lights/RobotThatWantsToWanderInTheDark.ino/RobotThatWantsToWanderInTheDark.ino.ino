@@ -15,15 +15,19 @@ TwoWheelRobot photophobe = TwoWheelRobot();
 int leftSensorPin = A0;
 int rightSensorPin = A1; 
 
-int leftBumpSensorPin = 20;
-int rightBumpSensorPin = 21;
+int bumpSensorPin = 20;
 
 int leftSensorLightLevel = 0;
 int rightSensorLightLevel = 0;
 int high, low, ave = 0;
 
-bool bumpedLeft = false;
-bool bumpedRight = false;
+bool tooBright = false;
+int brightnessThreshold = 300;
+
+bool bumped = false;
+
+
+
 
 void setup() {
   // start up the two wheel robot library
@@ -32,12 +36,56 @@ void setup() {
   Serial.begin(9600);
 }
 
-void loop() {
-
+void loop() {  
   checkLightSensors();
+  computeAverages();
+  determineIfItIsTooBright();
   
-  averages();
+  if(!tooBright){
+    wanderRandomly();
+  }
+  else{
+    runAwayFromLight();
+  }
+  
+  
+}
 
+void checkLightSensors(){
+  leftSensorLightLevel = analogRead(leftSensorPin);   
+  rightSensorLightLevel = analogRead(rightSensorPin);
+  Serial.print("left: "); 
+  Serial.println(leftSensorLightLevel);
+  Serial.println("right: ");
+  Serial.println(rightSensorLightLevel);
+}
+
+void computeAverages(){
+  ave = (leftSensorLightLevel + rightSensorLightLevel) / 2;
+  low = ave - 5;
+  high = ave + 5;
+}
+
+void determineIfItIsTooBright(){
+  if(leftSensorLightLevel > brightnessThreshold || rightSensorLightLevel > brightnessThreshold){
+    tooBright = true;
+  }
+  else{
+    tooBright = false;
+  }
+}
+
+void wanderRandomly(){
+  photophobe.forward();
+  checkBumpSensors();
+  
+  if(bumped){
+    photophobe.left(200);
+    bumped = false;    
+  }
+}
+
+void runAwayFromLight(){
   if(leftSensorLightLevel < high && leftSensorLightLevel > low){
     photophobe.backward();
   }
@@ -47,38 +95,9 @@ void loop() {
   else if(leftSensorLightLevel > rightSensorLightLevel){
     photophobe.backwardLeft();
   }
-
-  checkBumpSensors();
-  
-  if(bumpedLeft){
-    photophobe.left(500);
-    bumpedLeft = false;    
-  }
-  if(bumpedRight){
-    photophobe.right(500);
-    bumpedRight = false;
-  }
-}
-
-void checkLightSensors(){
-  leftSensorLightLevel = analogRead(leftSensorPin);   
-  rightSensorLightLevel = analogRead(rightSensorPin);
-  /* Serial.print("left: "); 
-  Serial.println(leftSensorLightLevel);
-  Serial.println("right: ");
-  Serial.println(rightSensorLightLevel);
-  delay(100); */
-}
-
-void averages(){
-  ave = (leftSensorLightLevel + rightSensorLightLevel) / 2;
-  low = ave - 5;
-  high = ave + 5;
 }
 
 void checkBumpSensors(){
-  bumpedLeft = digitalRead(leftBumpSensorPin);
-  bumpedRight = digitalRead(rightBumpSensorPin);
-  
+  bumped = digitalRead(bumpSensorPin);  
 }
 
