@@ -12,6 +12,8 @@
 // when we want to issue commands to our photophobe
 TwoWheelRobot photophobe = TwoWheelRobot();
 
+
+//I put a "YES" above each section that looks like it could be valuable to focus on, what do you think?
 int leftSensorPin = A0;
 int rightSensorPin = A1; 
 
@@ -36,37 +38,39 @@ void setup() {
   Serial.begin(9600);
 }
 
+//YES
 void loop() {  
   checkLightSensors();
   computeAverages();
-  determineIfItIsTooBright();
+  determineLightLevel();
   
   if(!tooBright){
     wanderRandomly();
   }
   else{
     runAwayFromLight();
-  }
-  
-  
+  }  
 }
 
+//YES
 void checkLightSensors(){
   leftSensorLightLevel = analogRead(leftSensorPin);   
   rightSensorLightLevel = analogRead(rightSensorPin);
   Serial.print("left: "); 
   Serial.println(leftSensorLightLevel);
   Serial.println("right: ");
-  Serial.println(rightSensorLightLevel);
+  Serial.print(rightSensorLightLevel);
 }
 
+//YES
 void computeAverages(){
   ave = (leftSensorLightLevel + rightSensorLightLevel) / 2;
   low = ave - 5;
   high = ave + 5;
 }
 
-void determineIfItIsTooBright(){
+//YES
+void determineLightLevel(){
   if(leftSensorLightLevel > brightnessThreshold || rightSensorLightLevel > brightnessThreshold){
     tooBright = true;
   }
@@ -80,7 +84,7 @@ void wanderRandomly(){
   checkBumpSensors();
   
   if(bumped){
-    photophobe.left(200);
+    photophobe.left(400);
     bumped = false;    
   }
 }
