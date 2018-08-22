@@ -1,4 +1,37 @@
+/*
+ * SumoBot! 
+ * You're creating a rock'em sock'em fighting machine dedicated to just one goal: 
+ * pushing the other robot over the edge while avoiding the same fate for yourself! 
+ *
+ * We'll be using Adafruit's Adabox002: Making Things Move, and some aditional parts:
+ * an ultrasonic rangefinder, two ultraviolet edge dectectors, and a whole heap of foamcore,   
+ * glue, and tape to create our robot warriors. 
+ *
+ * Below you'll find the code that makes it all tick, feel free to modifiy it for your own robot, 
+ * battles can be won in code as much as in construction. Have fun!
+ 
+ * sumoBot code by Edwin Fallwell + Matt Neer for the Monroe County Public Library in Bloomington, Indiana (2018). 
+ * released under an MIT Liscense. 
+ */
+
+#include <TwoWheelRobot.h>
+
+TwoWheelRobot sumoBot = TwoWheelRobot(); 
+
+
+// we need 
+int ultrasonicSensorPin = A0;
+int leftEdgeSensorPin = A1;
+int rightEdgeSensorPin = A2;
+
+bool youAreOnTheEdge = false;
+bool youCurrentlySeeTheOtherRobot = false;
+
+int ultrasonicThreshold = 100;
+int leftEdgeSensorThreshold, rightEdgeSensorThreshold = 400;
+
 void setup() {
+  sumoBot.initalize();
   delay(5000);
 }
 
@@ -15,7 +48,6 @@ void loop() {
   else {
     lookForTheOtherRobot();
   }
-
 }
 
 void checkTheSensors() {
@@ -30,8 +62,7 @@ void checkTheSensors() {
     youCurrentlySeeTheOtherRobot = false;
   }
 
-
-//check the left sensor
+  //check the left sensor
   if (leftEdgeSensorValue < leftEdgeSensorThreshold){
     leftEdgeSensorIsOnTheEdge = true;
   }
@@ -39,7 +70,7 @@ void checkTheSensors() {
     leftEdgeSensorisOnTheEdge = false;
   }
 
-//check the right sensor
+  //check the right sensor
   if (rightEdgeSensorValue < rightEdgeSensorThreshold){
     rightEdgeSensorIsOnTheEdge = true;
   }
@@ -50,7 +81,22 @@ void checkTheSensors() {
   if(leftEdgeSensorIsOnTheEdge || rightEdgeSensorIsOnTheEdge){
     youAreOnTheEdge = true;
   }
-  
 }
 
+void moveAwayFromTheEdge(){
+  if(leftEdgeSensorIsOnTheEdge){
+    sumoBot.forwardRight();
+  }
+  if(rightEdgeSensorIsOnTheEdge){
+    sumoBot.forwardLeft();
+  }
+}
+
+void chargeTheOtherRobot(){
+  sumoBot.forward();
+}
+
+void lookForTheOtherRobot(){
+  sumoBot.left();
+}
 
