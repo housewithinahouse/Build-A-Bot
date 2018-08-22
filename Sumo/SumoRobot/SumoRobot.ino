@@ -35,6 +35,15 @@ void setup() {
   delay(5000);
 }
 
+
+
+
+/*- - - - - - - - - - - - - - 
+ *  This is the main body of our sketch, where we set up 
+ *  the central loop that governs our robots behavior. 
+ *  
+ - - - - - - - - - - - - - - */
+
 void loop() {
 
   checkTheSensors();
@@ -85,10 +94,10 @@ void checkTheSensors() {
 
 void moveAwayFromTheEdge(){
   if(leftEdgeSensorIsOnTheEdge){
-    sumoBot.forwardRight();
+    sumoBot.backwardRight();
   }
   if(rightEdgeSensorIsOnTheEdge){
-    sumoBot.forwardLeft();
+    sumoBot.backwardLeft();
   }
 }
 
@@ -97,6 +106,13 @@ void chargeTheOtherRobot(){
 }
 
 void lookForTheOtherRobot(){
+  // this is where we set up the search pattern that 
+  // the sumoBot will use to try and locate the other robot. 
+  
+  // our inital pattern is very simple: spin left. 
   sumoBot.left();
+
+  // feel free to make your pattern more complicated,
+  // and hopefully more effective. 
 }
 
