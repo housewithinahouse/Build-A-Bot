@@ -18,36 +18,62 @@
 
 TwoWheelRobot sumoBot = TwoWheelRobot(); 
 
-
-// we need 
+// we'll need to use three different analog pins for this project
 int ultrasonicSensorPin = A0;
 int leftEdgeSensorPin = A1;
 int rightEdgeSensorPin = A2;
 
+// and have a couple of vars to hold some information about our state. 
 bool youAreOnTheEdge = false;
 bool youCurrentlySeeTheOtherRobot = false;
 
+// we've also got some numbers that we use as thresholds to measure 
+// against the data from our sensors
 int ultrasonicThreshold = 100;
 int leftEdgeSensorThreshold, rightEdgeSensorThreshold = 400;
 
+
+// below you'll see the a flowchart of our robot's programming.
+// we start at setup, which runs only once, and then proceed to 
+// loop around, asking questions and following arrows. 
+/*
+
+setup
+|
+├------------------------┐
+|                        |
+└>check the sensors-┐    └--------------------┬-┬-┐
+┌-------------------┘                         | | |
+|                                             | | |
+└>ask "am I on the edge?"                     | | |
+    yes--->MOVE away from edge----------------┘ | |
+    no--┐                                       | | 
+        |                                       | |
+        └->ask "can I see the other robot?"     | |
+            yes->CHARGE the other robot---------┘ |
+            no-->LOOK for the other robot---------┘
+
+*/
+// and that it, that's our whole program. With this, we can 
+// locate our foes and destory them utterly. 
+// Let's go over it in more detail:
+
+
 void setup() {
+  // in our setup phase we initalize our robot,
+  // which sets up some properties like speed
+  // and then delay for 5 seconds so that the robot 
+  // doesn't just run away as soon as we turn it on. 
   sumoBot.initalize();
   delay(5000);
 }
 
-
-
-
-/*- - - - - - - - - - - - - - 
- *  This is the main body of our sketch, where we set up 
- *  the central loop that governs our robots behavior. 
- *  
- - - - - - - - - - - - - - - */
-
 void loop() {
-
+  // our loop follows the flow chart we outlined above. 
+  // first we: 
   checkTheSensors();
 
+  //and then:
   if (youAreOnTheEdge) {
     moveAwayFromEdge();
   }
@@ -57,6 +83,8 @@ void loop() {
   else {
     lookForTheOtherRobot();
   }
+  
+  
 }
 
 void checkTheSensors() {
