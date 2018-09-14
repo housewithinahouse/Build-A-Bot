@@ -17,17 +17,18 @@
 // this is a library for controling two wheeled robots
 #include <TwoWheelRobot.h>
 
-// we'll need to use 2 analog pins for this project
-int leftEdgeSensorPin = A0;
-int rightEdgeSensorPin = A1;
+// we'll need to use 1 analog pin for this project
+int edgeSensorPin = A0;
+
 
 // a couple of vars to hold some information about our state
 bool youAreOnTheEdge = false;
-bool leftEdgeSensorIsOnTheEdge, rightEdgeSensorIsOnTheEdge = false;
+bool edgeSensorIsOnTheEdge = false;
 
 // we've also got some numbers that we use as thresholds to measure 
 // against the data from our sensors
-int leftEdgeSensorThreshold, rightEdgeSensorThreshold = 400;
+int edgeSensorThreshold = 600;
+
 
 // we need to create an sumobot object that we'll issue commands to
 TwoWheelRobot sumoBot = TwoWheelRobot(); 
@@ -81,40 +82,22 @@ void loop() {
 }
 
 void checkTheSensors() {
-  int leftEdgeSensorValue = analogRead(leftEdgeSensorPin);
-  int rightEdgeSensorValue = analogRead(rightEdgeSensorPin);
+  int edgeSensorValue = analogRead(edgeSensorPin);
 
   //check the edge left sensor and find out if our left side is on the edge
-  if (leftEdgeSensorValue < leftEdgeSensorThreshold){
-    leftEdgeSensorIsOnTheEdge = true;
-  }
-  else{
-    leftEdgeSensorIsOnTheEdge = false;
-  }
-
-  //check the right edge sensor and find out our right side is on the edge
-  if (rightEdgeSensorValue < rightEdgeSensorThreshold){
-    rightEdgeSensorIsOnTheEdge = true;
-  }
-  else{
-    rightEdgeSensorIsOnTheEdge = false;
-  }
-
-  // sets a var to true if either sensor is on the edge
-  if(leftEdgeSensorIsOnTheEdge || rightEdgeSensorIsOnTheEdge){
+  if (edgeSensorValue > edgeSensorThreshold){
     youAreOnTheEdge = true;
   }
+  else{
+    youAreOnTheEdge = false;
+  }
+  
 }
 
 void moveAwayFromEdge(){
-  if(leftEdgeSensorIsOnTheEdge){
-    sumoBot.backward();
-  }
-  if(rightEdgeSensorIsOnTheEdge){
-    sumoBot.backward();
-  }
-  delay(150);
-  sumobot.left(200);
+  sumoBot.backward(500);
+  sumoBot.left(14
+  00);
 
   youAreOnTheEdge = false; 
 }

@@ -1,5 +1,5 @@
-int rightSensor = A1;
-int leftSensor = A2;
+int rightSensor = 0;
+int leftSensor = A0;
 
 void setup()
 {
