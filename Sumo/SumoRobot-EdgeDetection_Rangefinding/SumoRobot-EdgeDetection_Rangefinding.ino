@@ -37,7 +37,7 @@ bool youCurrentlySeeTheOtherRobot = false;
 
 // we've also got some numbers that we use as thresholds to measure 
 // against the data from our sensors
-int distanceThreshold = 100;
+int distanceThreshold = 36;
 int leftEdgeSensorThreshold, rightEdgeSensorThreshold = 400;
 
 // we need to create an sumobot object that we'll issue commands to
