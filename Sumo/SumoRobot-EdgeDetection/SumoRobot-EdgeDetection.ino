@@ -17,13 +17,15 @@
 // this is a library for controling two wheeled robots
 #include <TwoWheelRobot.h>
 
-// we'll need to use 1 analog pin for this project
+// we'll need to use 1 analog pin and 1 digital pin for this project
 int edgeSensorPin = A0;
-
+int buttonPin = 13;
 
 // a couple of vars to hold some information about our state
 bool youAreOnTheEdge = false;
 bool edgeSensorIsOnTheEdge = false;
+bool buttonHasBeenPushed = false;
+
 
 // we've also got some numbers that we use as thresholds to measure 
 // against the data from our sensors
@@ -40,6 +42,8 @@ TwoWheelRobot sumoBot = TwoWheelRobot();
 
 setup
 |
+wait for button push
+|
 ├------------------------┐
 |                        |
 └>CHECK the sensors-┐    └--------------------┬-┐
@@ -52,7 +56,7 @@ setup
 */
 // and that it, that's the core of our whole program. 
 // With this, we can avoid the edge and destory our foes
-// utterly if they happen to be in our way.  
+// utterly if they just so happen to be in our way.  
 // Let's go over it in more detail:
 
 
@@ -62,23 +66,30 @@ void setup() {
   // and then delay for 5 seconds so that the robot 
   // doesn't just run away as soon as we turn it on. 
   sumoBot.initalize();
-  delay(5000);
+
 }
 
 void loop() {
+  if(!buttonHasBeenPushed){
+    int buttonState = digitalRead(buttonPin);
+    if(buttonState == HIGH){
+      buttonHasBeenPushed = true;
+      delay(5000);
+    }
+  }
+  else{
   // our loop follows the flow chart we outlined above. 
   // first we: 
-  checkTheSensors();
-
-  //and then:
-  if (youAreOnTheEdge) {
-    moveAwayFromEdge();
-  }
-  else {
-    moveAroundTheArena();
-  }
+    checkTheSensors();
   
-  
+    //and then:
+    if (youAreOnTheEdge) {
+      moveAwayFromEdge();
+    }
+    else {
+      moveAroundTheArena();
+    }
+  }  
 }
 
 void checkTheSensors() {
@@ -96,8 +107,7 @@ void checkTheSensors() {
 
 void moveAwayFromEdge(){
   sumoBot.backward(500);
-  sumoBot.left(14
-  00);
+  sumoBot.left(1400);
 
   youAreOnTheEdge = false; 
 }
