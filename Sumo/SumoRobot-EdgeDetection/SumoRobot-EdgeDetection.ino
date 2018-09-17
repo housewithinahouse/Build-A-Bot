@@ -18,8 +18,8 @@
 #include <TwoWheelRobot.h>
 
 // we'll need to use 1 analog pin and 1 digital pin for this project
-int edgeSensorPin = A0;
-int buttonPin = 13;
+int edgeSensorPin = A1;
+int buttonPin = 18;
 
 // a couple of vars to hold some information about our state
 bool youAreOnTheEdge = false;
@@ -95,7 +95,7 @@ void loop() {
 void checkTheSensors() {
   int edgeSensorValue = analogRead(edgeSensorPin);
 
-  //check the edge left sensor and find out if our left side is on the edge
+  //check the edge  sensor and find out if we are on the edge
   if (edgeSensorValue > edgeSensorThreshold){
     youAreOnTheEdge = true;
   }
