@@ -68,14 +68,19 @@ void setup() {
 }
 
 void loop() {
-  if(!buttonHasBeenPushed){
-    int buttonState = digitalRead(buttonPin);
-    if(buttonState == HIGH){
-      buttonHasBeenPushed = true;
-      delay(5000);
-    }
+  // we need to check first if the button has been pushed. 
+  // If the button has been pushed, then we wait 5 seconds and 
+  // switch over to the main loop. Otherwise, we just keep
+  // waiting to see if it get gets pushed. 
+  int buttonState = digitalRead(buttonPin);
+  if(buttonState == HIGH){
+    buttonHasBeenPushed = true;
+    delay(5000);
   }
-  else{
+
+  // after the button has been pushed, the code below will loop over
+  // and over again. Until the button has been pushed it will be ignored. 
+  while(buttonHasBeenPushed){
   // our loop follows the flow chart we outlined above. 
   // first we: 
     checkTheSensors();
