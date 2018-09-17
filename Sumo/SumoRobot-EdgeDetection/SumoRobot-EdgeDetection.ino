@@ -57,8 +57,6 @@ wait for button push
 // and that it, that's the core of our whole program. 
 // With this, we can avoid the edge and destory our foes
 // utterly if they just so happen to be in our way.  
-// Let's go over it in more detail:
-
 
 void setup() {
   // in our setup phase we initalize our robot,
@@ -92,26 +90,3 @@ void loop() {
   }  
 }
 
-void checkTheSensors() {
-  int edgeSensorValue = analogRead(edgeSensorPin);
-
-  //check the edge  sensor and find out if we are on the edge
-  if (edgeSensorValue > edgeSensorThreshold){
-    youAreOnTheEdge = true;
-  }
-  else{
-    youAreOnTheEdge = false;
-  }
-  
-}
-
-void moveAwayFromEdge(){
-  sumoBot.backward(500);
-  sumoBot.left(1400);
-
-  youAreOnTheEdge = false; 
-}
-
-void moveAroundTheArena(){
-  sumoBot.forward();
-}
