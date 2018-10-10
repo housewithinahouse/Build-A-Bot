@@ -20,11 +20,11 @@
 // and this is a library for our ultrasonic sensor
 #include <NewPing.h>
 
-// we'll need to use four different pins for this project, 2 analog and 2 digital
-int ultrasonicTriggerPin = 21;
-int ultrasonicRecieverPin = 22;
-int leftEdgeSensorPin = A0;
-int rightEdgeSensorPin = A1;
+// we'll need to use four different pins for this project, 2 analog and 3 digital
+int ultrasonicTriggerPin = 20;
+int ultrasonicRecieverPin = 21;
+int edgeSensorPin = A1;
+int buttonPin = 18;
 
 // we also need to set the max distance that we want to scan at
 // this number should be less than 400
@@ -32,13 +32,14 @@ int maxUltrasonicRange = 200;
 
 // a couple of vars to hold some information about our state
 bool youAreOnTheEdge = false;
-bool leftEdgeSensorIsOnTheEdge, rightEdgeSensorIsOnTheEdge = false;
+bool edgeSensorIsOnTheEdge = false;
+bool buttonHasBeenPushed = false;
 bool youCurrentlySeeTheOtherRobot = false;
 
 // we've also got some numbers that we use as thresholds to measure 
 // against the data from our sensors
-int distanceThreshold = 36;
-int leftEdgeSensorThreshold, rightEdgeSensorThreshold = 400;
+int edgeSensorThreshold = 700;
+int distanceThreshold = 12;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 
 // we need to create an sumobot object that we'll issue commands to
 TwoWheelRobot sumoBot = TwoWheelRobot(); 
@@ -77,23 +78,40 @@ void setup() {
   // in our setup phase we initalize our robot,
   // which sets up some properties like speed
   sumoBot.initalize();
+   Serial.begin(9600);
 }
 
 void loop() {
-  // our loop follows the flow chart we outlined above. 
-  // first we: 
-  checkTheSensors();
-
-  //and then:
-  if (youAreOnTheEdge) {
-    moveAwayFromEdge();
+  // we need to check first if the button has been pushed. 
+  // If the button has been pushed, then we wait 5 seconds and 
+  // switch over to the main loop. Otherwise, we just keep
+  // waiting to see if it get gets pushed. 
+  int buttonState = digitalRead(buttonPin);
+  if(buttonState == HIGH){
+    buttonHasBeenPushed = true;
+    delay(5000);
   }
-  else if (youCurrentlySeeTheOtherRobot) {
-    chargeTheOtherRobot();
+  // after the button has been pushed, the code below will loop over
+  // and over again. Until the button has been pushed it will be ignored. 
+  while(buttonHasBeenPushed){
+    // our loop follows the flow chart we outlined above. 
+    // first we: 
+    checkTheSensors();
+  
+    //and then:
+    if (youAreOnTheEdge) {
+      moveAwayFromEdge();
+      Serial.println("move from edge");
+    }
+    else if (youCurrentlySeeTheOtherRobot) {
+      chargeTheOtherRobot();
+      Serial.println("charging");
+    }
+    else {
+      lookForTheOtherRobot();
+      Serial.println("looking");
+    }  
   }
-  else {
-    lookForTheOtherRobot();
-  }  
 }
 
 /*

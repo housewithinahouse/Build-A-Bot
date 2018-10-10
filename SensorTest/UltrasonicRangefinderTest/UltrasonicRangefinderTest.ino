@@ -3,8 +3,8 @@
 #include <NewPing.h>
 
 // A NewPing object needs three things:
-int ultrasonicTriggerPin = 21;
-int ultrasonicRecieverPin = 22;
+int ultrasonicTriggerPin = 20;
+int ultrasonicRecieverPin = 21;
 int maxUltrasonicRange = 200;
 
 // we'll name ours sonar:

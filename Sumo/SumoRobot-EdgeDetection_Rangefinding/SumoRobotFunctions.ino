@@ -1,28 +1,16 @@
 void checkTheSensors() {
-  int leftEdgeSensorValue = analogRead(leftEdgeSensorPin);
-  int rightEdgeSensorValue = analogRead(rightEdgeSensorPin);
+  int edgeSensorValue = analogRead(edgeSensorPin);
+
   int distanceValue = sonar.ping_in(); // measure distance in inches. 
+  Serial.println(distanceValue);
 
-  //check the edge left sensor and find out if our left side is on the edge
-  if (leftEdgeSensorValue < leftEdgeSensorThreshold){
-    leftEdgeSensorIsOnTheEdge = true;
-  }
-  else{
-    leftEdgeSensorIsOnTheEdge = false;
-  }
-
-  //check the right edge sensor and find out our right side is on the edge
-  if (rightEdgeSensorValue < rightEdgeSensorThreshold){
-    rightEdgeSensorIsOnTheEdge = true;
-  }
-  else{
-    rightEdgeSensorIsOnTheEdge = false;
-  }
-
-  // sets a var to true if either sensor is on the edge
-  if(leftEdgeSensorIsOnTheEdge || rightEdgeSensorIsOnTheEdge){
+  //check the edge  sensor and find out if we are on the edge
+  if (edgeSensorValue > edgeSensorThreshold){
     youAreOnTheEdge = true;
   }
+  else{
+    youAreOnTheEdge = false;
+  }  
 
   if (distanceValue < distanceThreshold) {
     youCurrentlySeeTheOtherRobot = true;
@@ -33,18 +21,10 @@ void checkTheSensors() {
 }
 
 void moveAwayFromEdge(){
-  if(leftEdgeSensorIsOnTheEdge){
-    sumoBot.backward();
-  }
-  if(rightEdgeSensorIsOnTheEdge){
-    sumoBot.backward();
-  }
+   sumoBot.backward(500);
+  sumoBot.left(1400);
 
-  youAreOnTheEdge = false;
-
-  // note, this assumes that you're mounting the sensors in the
-  // front. If you're mounting them in the rear, you'd need to use 
-  // different logic.   
+  youAreOnTheEdge = false;    
 }
 
 void chargeTheOtherRobot(){
