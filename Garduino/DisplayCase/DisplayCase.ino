@@ -3,10 +3,18 @@
 #define NUM_WATER_LEDS    6
 CRGB waterLEDs[NUM_WATER_LEDS];
 
+#define NUM_LIGHT_LEDS    6
+CRGB lightLEDs[NUM_LIGHT_LEDS];
+
+const int waterPumpPin = 3;
+const int waterSolenoidPin = 4;
 const int waterLightShowPin = 5; 
 const int solarLightShowPin = 6; 
-const int moistureLightShowPin = 7; 
-int buttonState;
+const int moistureLightShowPin = 7;
+const int waterLightSensorPin = A0;
+const int lightLightSensorPin = A1;
+const int soilMoisturePin = A2;
+
 int gHue = 0;
 
 int moistureLevel = 255;
@@ -17,7 +25,7 @@ bool waterLightShowSensorTriggered = false;
 bool solarLightShowSensorTriggered = false;
 
 void setup() {
-  addWaterLEDs(6);
+  FastLED.addLeds<NEOPIXEL, 2>(waterLEDs, NUM_WATER_LEDS); 
   setWaterLEDBrightness(50); 
 }
 
@@ -56,9 +64,7 @@ void setWaterLEDBrightness(int brightness){
   FastLED.setBrightness(brightness);
 }
 
-void addWaterLEDs(int LEDcount){
-  FastLED.addLeds<NEOPIXEL, 2>(waterLEDs, LEDcount); 
-}
+
 
 
 void waterLightShow(){
