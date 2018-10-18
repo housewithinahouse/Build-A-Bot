@@ -1,5 +1,5 @@
 
-//one nail to V5 and the other to A0 w/ resistor
+//one nail to 5v and the other to A0 w/ resistor
 int moistureSensor = A0;
 
 //storage variable
