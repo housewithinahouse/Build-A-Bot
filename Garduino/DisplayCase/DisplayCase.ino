@@ -1,10 +1,14 @@
 #include "FastLED.h"
+#include <LiquidCrystal.h>
 
 #define NUM_WATER_LEDS    6
 CRGB waterLEDs[NUM_WATER_LEDS];
 
 #define NUM_LIGHT_LEDS    6
 CRGB lightLEDs[NUM_LIGHT_LEDS];
+
+const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
 const int waterPumpPin = 3;
 const int waterSolenoidPin = 4;
@@ -23,6 +27,8 @@ int cycle = 0;
 
 int waterLightSensorThreshold = 600; 
 int solarLightSensorThreshold = 600;
+int lowerMoistureThreshold = 100;
+int upperMoistureThreshold = 150;
 
 bool evenCycle = false;
 bool waterUntilFull = false;
@@ -67,6 +73,9 @@ void loop(){
   else if(moistureLevel>200){
     waterUntilFull=false;
   }
+
+  //displayLCDStuff();
+  
   //flip flop the cycle ticker
   evenCycle = !evenCycle;
 
@@ -96,10 +105,15 @@ void checkTheSensors(){
   else{
     solarLightSensorTriggered = false;
   }
+
+  realMoistureLevel = map(analogRead(moistureSensorPin),moistureLowerThreshold, moistureUpperThreshold, 0, 255);
+  
 }
 
 void decreaseMoisture(){
-    moistureLevel-=1;
+  moistureLevel-=1;
+  moistureLevel = constrain(moistureLevel, 0, 255);
+   
 }
 
 
