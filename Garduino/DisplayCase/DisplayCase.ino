@@ -8,43 +8,55 @@ CRGB lightLEDs[NUM_LIGHT_LEDS];
 
 const int waterPumpPin = 3;
 const int waterSolenoidPin = 4;
-const int waterLightShowPin = 5; 
-const int solarLightShowPin = 6; 
-const int moistureLightShowPin = 7;
+const int waterLEDPin = 5; 
+const int solarLEDPin = 6; 
+const int moistureLEDPin = 7;
 const int waterLightSensorPin = A0;
-const int lightLightSensorPin = A1;
+const int solarLightSensorPin = A1;
 const int soilMoisturePin = A2;
 
 int gHue = 0;
 
 int moistureLevel = 255;
 
+int cycle = 0;
+
+int waterLightSensorThreshold = 600; 
+int solarLightSensorThreshold = 600;
+
 bool evenCycle = false;
 bool waterUntilFull = false;
-bool waterLightShowSensorTriggered = false;
-bool solarLightShowSensorTriggered = false;
+bool waterLightSensorTriggered = false;
+bool solarLightSensorTriggered = false;
 
 void setup() {
-  FastLED.addLeds<NEOPIXEL, 2>(waterLEDs, NUM_WATER_LEDS); 
-  setWaterLEDBrightness(50); 
+  FastLED.addLeds<NEOPIXEL, waterLEDPin>(waterLEDs, NUM_WATER_LEDS); 
+  FastLED.addLeds<NEOPIXEL, solarLEDPin>(lightLEDs, NUM_LIGHT_LEDS); 
+  setLEDBrightness(50); 
+
+  pinMode(waterPumpPin, OUTPUT);
+  pinMode(waterSolenoidPin, OUTPUT);
+  pinMode(waterLightSensorPin, INPUT);
+  pinMode(solarLightSensorPin, INPUT);
+  pinMode(soilMoisturePin, INPUT);
 }
 
 void loop(){
  // checkTheSensors();
-  if(waterLightShowSensorTriggered||waterUntilFull){
-    waterLightShow();
+  if(waterLightSensorTriggered||waterUntilFull){
+    waterLEDshow();
   }
   else{
-    waterLightShowDecay();
+    waterLEDDecay();
   }
- //if(solarLightShowSensorTriggered){
- //   solarLightShow();
- // }
- // else{
- //   solarLightShowDecay();
- // }
+ if(solarLightSensorTriggered){
+ //   solarLED();
+ }
+ else{
+ //   solarLEDDecay();
+ }
 
- // moistureLightShow();
+ // moistureLED();
 
   FastLED.show();
   
@@ -57,17 +69,41 @@ void loop(){
   }
   //flip flop the cycle ticker
   evenCycle = !evenCycle;
+
+  //increase the actual cycle count
+  cycle++;
 }
 
-void setWaterLEDBrightness(int brightness){
+void setLEDBrightness(int brightness){
   brightness = constrain(brightness, 0, 100);
   FastLED.setBrightness(brightness);
 }
 
+void checkTheSensors(){
+  int waterLightSensorValue = analogRead(waterLightSensorPin);
+  int solarLightSensorValue = analogRead(solarLightSensorPin);
+  
+  if(waterLightSensorValue > waterLightSensorThreshold){
+    waterLightSensorTriggered = true;
+  }
+  else{
+    waterLightSensorTriggered = false;
+  }
+
+  if(solarLightSensorValue > solarLightSensorThreshold){
+    solarLightSensorTriggered = true;
+  }
+  else{
+    solarLightSensorTriggered = false;
+  }
+}
+
+void decreaseMoisture(){
+    moistureLevel-=1;
+}
 
 
-
-void waterLightShow(){
+void waterLEDshow(){
   int waterHueStart = 166;
   int waterHueRange = 60;
   for(int i = 0; i < NUM_WATER_LEDS; i++){
@@ -81,7 +117,7 @@ void waterLightShow(){
   moistureLevel+=2;
 }
 
-void waterLightShowDecay(){
+void waterLEDDecay(){
   fadeToBlackBy(waterLEDs, NUM_WATER_LEDS, 1);
 }
 
@@ -95,8 +131,3 @@ void waterLightShowDecay(){
 //    }
 //}
 
-//void fadeToBlack(){
-//  fadeToBlackBy(leds, NUM_LEDS, 1);
-//  delay(5);
-//  FastLED.show();
-//}
