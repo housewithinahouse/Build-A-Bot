@@ -1,4 +1,4 @@
-int analogSensorA = A1;
+int analogSensorA = A0;
 
 void setup()
 {
