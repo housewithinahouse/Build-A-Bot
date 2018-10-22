@@ -26,6 +26,7 @@ int moistureLevel = 0;
 int realMoistureLevel = 0;
 int moistureDecreaseSpeed = 251;
 int solarCycleLength = 900;
+int textDisplayCycle = 300;
 
 int cycle = 0;
 
@@ -37,6 +38,7 @@ int upperMoistureThreshold = 150;
 bool evenCycle = false;
 bool waterUntilFull = false;
 bool timeToShine = false;
+bool textFlipFlop = false;
 bool waterLightSensorTriggered = false;
 bool solarLightSensorTriggered = false;
 
@@ -112,31 +114,31 @@ void loop(){
     lcd.setCursor(0, 1);
     lcd.write(byte(1));
     lcd.print("-");
-    lcd.print(map(moistureLevel, 0, 255, 0, 100));
-    lcd.print("%   ");
+    lcd.print(map(moistureLevel, 0, 255, 0, 99));
+    lcd.print("% ");
   }
   else{
     waterLEDDecay();
     lcd.setCursor(0, 1);
     lcd.write(byte(0));
     lcd.print("-");
-    lcd.print(map(moistureLevel, 0, 255, 0, 100));
-    lcd.print("%   ");
+    lcd.print(map(moistureLevel, 0, 255, 0, 99));
+    lcd.print("% ");
   }
  if(solarLightSensorTriggered|timeToShine){
     lcd.setCursor(6, 1);
     lcd.write(byte(3));
     lcd.print("-");
-    lcd.print(map(cycle%solarCycleLength, 0, solarCycleLength, 100, 0));
-    lcd.print("s   ");
+    lcd.print(map(cycle%solarCycleLength, 0, solarCycleLength, 99, 0));
+    lcd.print(" ");
     solarLEDshow();
  }
  else{
     lcd.setCursor(6, 1);
     lcd.write(byte(2));
     lcd.print("-");
-    lcd.print(map(cycle%solarCycleLength, 0, solarCycleLength, 100, 0));
-    lcd.print("s   ");
+    lcd.print(map(cycle%solarCycleLength, 0, solarCycleLength, 99, 0));
+    lcd.print(" ");
     solarLEDDecay();
  }
 
@@ -163,6 +165,23 @@ void loop(){
 
   //increase the actual cycle count
   cycle++;
+
+  if(cycle%textDisplayCycle==0){
+    textFlipFlop=!textFlipFlop;
+  }
+  
+  if(textFlipFlop){
+    lcd.setCursor(10, 0);
+    lcd.write(" BUILD");
+    lcd.setCursor(11, 1);
+    lcd.write("A BOT");
+  }
+  else{
+    lcd.setCursor(10, 0);
+    lcd.write("GROW A");
+    lcd.setCursor(11, 1);
+    lcd.write("PLANT");
+  }  
 }
 
 void checkTheSensors(){
