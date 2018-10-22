@@ -7,6 +7,9 @@ CRGB waterLEDs[NUM_WATER_LEDS];
 #define NUM_SOLAR_LEDS    16
 CRGB solarLEDs[NUM_SOLAR_LEDS];
 
+#define NUM_MOISTURE_LEDS    16
+CRGB moistureLEDs[NUM_MOISTURE_LEDS];
+
 const int rs = 7, en = 8, d4 = 9, d5 = 10, d6 = 11, d7 = 12;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
@@ -91,6 +94,7 @@ void setup() {
   Serial.begin(9600);
   FastLED.addLeds<NEOPIXEL, waterLEDPin>(waterLEDs, NUM_WATER_LEDS); 
   FastLED.addLeds<NEOPIXEL, solarLEDPin>(solarLEDs, NUM_SOLAR_LEDS); 
+  FastLED.addLeds<NEOPIXEL, moistureLEDPin>(moistureLEDs, NUM_MOISTURE_LEDS); 
   FastLED.setBrightness(10); 
 
   lcd.begin(16, 2);
@@ -142,7 +146,7 @@ void loop(){
     solarLEDDecay();
  }
 
- // moistureLED();
+  moistureLEDshow();
 
   FastLED.show();
   
