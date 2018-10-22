@@ -4,8 +4,8 @@
 #define NUM_WATER_LEDS    16
 CRGB waterLEDs[NUM_WATER_LEDS];
 
-#define NUM_LIGHT_LEDS    6
-CRGB lightLEDs[NUM_LIGHT_LEDS];
+#define NUM_SOLAR_LEDS    16
+CRGB solarLEDs[NUM_SOLAR_LEDS];
 
 const int rs = 7, en = 8, d4 = 9, d5 = 10, d6 = 11, d7 = 12;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
@@ -25,6 +25,7 @@ int gHue = 0;
 int moistureLevel = 0;
 int realMoistureLevel = 0;
 int moistureDecreaseSpeed = 251;
+int solarCycleLength = 900;
 
 int cycle = 0;
 
@@ -35,6 +36,7 @@ int upperMoistureThreshold = 150;
 
 bool evenCycle = false;
 bool waterUntilFull = false;
+bool timeToShine = false;
 bool waterLightSensorTriggered = false;
 bool solarLightSensorTriggered = false;
 
@@ -86,8 +88,8 @@ byte sunFilled[8] = {
 void setup() {
   Serial.begin(9600);
   FastLED.addLeds<NEOPIXEL, waterLEDPin>(waterLEDs, NUM_WATER_LEDS); 
-  FastLED.addLeds<NEOPIXEL, solarLEDPin>(lightLEDs, NUM_LIGHT_LEDS); 
-  FastLED.setBrightness(50); 
+  FastLED.addLeds<NEOPIXEL, solarLEDPin>(solarLEDs, NUM_SOLAR_LEDS); 
+  FastLED.setBrightness(10); 
 
   lcd.begin(16, 2);
   lcd.createChar(0, waterdropEmpty);
@@ -109,7 +111,7 @@ void loop(){
     waterLEDshow();
     lcd.setCursor(0, 1);
     lcd.write(byte(1));
-    lcd.print(" ");
+    lcd.print("-");
     lcd.print(map(moistureLevel, 0, 255, 0, 100));
     lcd.print("%   ");
   }
@@ -117,20 +119,25 @@ void loop(){
     waterLEDDecay();
     lcd.setCursor(0, 1);
     lcd.write(byte(0));
-    lcd.print(" ");
+    lcd.print("-");
     lcd.print(map(moistureLevel, 0, 255, 0, 100));
     lcd.print("%   ");
   }
- if(solarLightSensorTriggered){
+ if(solarLightSensorTriggered|timeToShine){
     lcd.setCursor(6, 1);
-    lcd.write(byte(2));
-    
- //   solarLEDshow();
+    lcd.write(byte(3));
+    lcd.print("-");
+    lcd.print(map(cycle%solarCycleLength, 0, solarCycleLength, 100, 0));
+    lcd.print("s   ");
+    solarLEDshow();
  }
  else{
     lcd.setCursor(6, 1);
-    lcd.write(byte(3));
- //   solarLEDDecay();
+    lcd.write(byte(2));
+    lcd.print("-");
+    lcd.print(map(cycle%solarCycleLength, 0, solarCycleLength, 100, 0));
+    lcd.print("s   ");
+    solarLEDDecay();
  }
 
  // moistureLED();
@@ -143,6 +150,10 @@ void loop(){
   }
   else if(moistureLevel>200){
     waterUntilFull=false;
+  }
+
+  if(cycle%solarCycleLength==0){
+     timeToShine=!timeToShine;
   }
 
   //displayLCDStuff();
@@ -160,7 +171,6 @@ void checkTheSensors(){
   
   if(waterLightSensorValue < waterLightSensorThreshold){
     waterLightSensorTriggered = true;
-    Serial.println(analogRead(waterLightSensorPin));
     lcd.setCursor(0, 0);
     lcd.print("*");
   }
@@ -170,14 +180,19 @@ void checkTheSensors(){
     lcd.print(" ");
   }
 
-  if(solarLightSensorValue > solarLightSensorThreshold){
+  if(solarLightSensorValue < solarLightSensorThreshold){
     solarLightSensorTriggered = true;
+    lcd.setCursor(6, 0);
+    lcd.print("*");
   }
   else{
     solarLightSensorTriggered = false;
+    lcd.setCursor(6, 0);
+    lcd.print(" ");
   }
 
   moistureDecreaseSpeed = map(analogRead(moistureDecreaseSpeedPin), 0, 1024, 1, 255);
+  solarCycleLength = moistureDecreaseSpeed*60;
 
   realMoistureLevel = map(analogRead(moistureSensorPin),lowerMoistureThreshold, upperMoistureThreshold, 0, 255);
   
