@@ -7,12 +7,12 @@
 //    }
 //}
 
-void solarLEDshow(){
+void solarLEDset(){
   for(int i = 0; i < NUM_SOLAR_LEDS; i++){
     solarLEDs[i]=CRGB::White;
   }
 }
 
-void solarLEDDecay(){
+void solarLEDdecay(){
   fadeToBlackBy(solarLEDs, NUM_SOLAR_LEDS, 10);
 }

@@ -1,6 +1,22 @@
 #include "FastLED.h"
 #include <LiquidCrystal.h>
 
+const int waterPumpPin = 2;
+const int waterSolenoidPin = 3;
+const int waterLEDPin = 4; 
+const int solarLEDPin = 5; 
+const int moistureLEDPin = 6;
+const int rs = 7;
+const int en = 8;
+const int d4 = 9;
+const int d5 = 10;
+const int d6 = 11;
+const int d7 = 12;
+const int waterLightSensorPin = A0;
+const int solarLightSensorPin = A1;
+const int moistureSensorPin = A2;
+const int moistureDecreaseSpeedPin = A3;
+
 #define NUM_WATER_LEDS    16
 CRGB waterLEDs[NUM_WATER_LEDS];
 
@@ -10,18 +26,7 @@ CRGB solarLEDs[NUM_SOLAR_LEDS];
 #define NUM_MOISTURE_LEDS    16
 CRGB moistureLEDs[NUM_MOISTURE_LEDS];
 
-const int rs = 7, en = 8, d4 = 9, d5 = 10, d6 = 11, d7 = 12;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
-
-const int waterPumpPin = 2;
-const int waterSolenoidPin = 3;
-const int waterLEDPin = 4; 
-const int solarLEDPin = 5; 
-const int moistureLEDPin = 6;
-const int waterLightSensorPin = A0;
-const int solarLightSensorPin = A1;
-const int moistureSensorPin = A2;
-const int moistureDecreaseSpeedPin = A3;
 
 int gHue = 0;
 
@@ -33,17 +38,21 @@ int textDisplayCycle = 300;
 
 int cycle = 0;
 
-int waterLightSensorThreshold = 300; 
-int solarLightSensorThreshold = 300;
-int lowerMoistureThreshold = 100;
-int upperMoistureThreshold = 150;
+int waterLightSensorThreshold = 300;    //out of 1024
+int solarLightSensorThreshold = 300;    //out of 1024
+int lowerMoistureSensorThreshold = 100; //out of 1024
+int upperMoistureSensorThreshold = 150; //out of 1024
 
-bool evenCycle = false;
+int moistureLevelToStartWateringAt = 0;          //out of 255
+int moistureLevelToStopWateringAt = 200; //out of 255
+
 bool waterUntilFull = false;
 bool timeToShine = false;
 bool textFlipFlop = false;
 bool waterLightSensorTriggered = false;
 bool solarLightSensorTriggered = false;
+bool waterCycleRunning = false;
+bool solarCycleRunning = false;
 
 byte waterdropEmpty[8] = {
   0b00100,
@@ -92,6 +101,7 @@ byte sunFilled[8] = {
 
 void setup() {
   Serial.begin(9600);
+  
   FastLED.addLeds<NEOPIXEL, waterLEDPin>(waterLEDs, NUM_WATER_LEDS); 
   FastLED.addLeds<NEOPIXEL, solarLEDPin>(solarLEDs, NUM_SOLAR_LEDS); 
   FastLED.addLeds<NEOPIXEL, moistureLEDPin>(moistureLEDs, NUM_MOISTURE_LEDS); 
@@ -112,153 +122,55 @@ void setup() {
 }
 
 void loop(){
+  // two light level sensors, a pot, and our moisture sensor
   checkTheSensors();
+
+  // central logic of system
   if(waterLightSensorTriggered||waterUntilFull){
-    waterLEDshow();
-    lcd.setCursor(0, 1);
-    lcd.write(byte(1));
-    lcd.print("-");
-    lcd.print(map(moistureLevel, 0, 255, 0, 99));
-    lcd.print("% ");
+    waterCycleRunning = true;
+    waterLEDset();
   }
   else{
-    waterLEDDecay();
-    lcd.setCursor(0, 1);
-    lcd.write(byte(0));
-    lcd.print("-");
-    lcd.print(map(moistureLevel, 0, 255, 0, 99));
-    lcd.print("% ");
+    waterCycleRunning = false;
+    waterLEDdecay();
   }
- if(solarLightSensorTriggered|timeToShine){
-    lcd.setCursor(6, 1);
-    lcd.write(byte(3));
-    lcd.print("-");
-    lcd.print(map(cycle%solarCycleLength, 0, solarCycleLength, 99, 0));
-    lcd.print(" ");
-    solarLEDshow();
- }
- else{
-    lcd.setCursor(6, 1);
-    lcd.write(byte(2));
-    lcd.print("-");
-    lcd.print(map(cycle%solarCycleLength, 0, solarCycleLength, 99, 0));
-    lcd.print(" ");
-    solarLEDDecay();
- }
+  if(solarLightSensorTriggered|timeToShine){
+    solarCycleRunning = true;
+    solarLEDset();
+  }
+  else{
+    solarCycleRunning = false;
+    solarLEDdecay();
+  }
 
-  moistureLEDshow();
-
-  FastLED.show();
+  moistureLEDset();
   
+  
+
+  //plant grows drier
   decreaseMoisture();
-  if(moistureLevel<=0){
+
+  //if the moisture ever gets down to the lower moisture limit, water until moisture threshold is hit
+  if(moistureLevel<=moistureLevelToStartWateringAt){
     waterUntilFull=true;
   }
-  else if(moistureLevel>200){
+  else if(moistureLevel>moistureLevelToStopWateringAt){
     waterUntilFull=false;
   }
 
+  //oscillate between having solar light on and off at 50% duty cycle
   if(cycle%solarCycleLength==0){
      timeToShine=!timeToShine;
   }
-
-  //displayLCDStuff();
   
-  //flip flop the cycle ticker
-  evenCycle = !evenCycle;
+  //run the lcd display code
+  lcdDisplay();
 
-  //increase the actual cycle count
+  //light up all the lights
+  FastLED.show();
+  
+  //increase the cycle count
   cycle++;
-
-  if(cycle%textDisplayCycle==0){
-    textFlipFlop=!textFlipFlop;
-  }
-  
-  if(textFlipFlop){
-    lcd.setCursor(10, 0);
-    lcd.write(" BUILD");
-    lcd.setCursor(11, 1);
-    lcd.write("A BOT");
-  }
-  else{
-    lcd.setCursor(10, 0);
-    lcd.write("GROW A");
-    lcd.setCursor(11, 1);
-    lcd.write("PLANT");
-  }  
-}
-
-void checkTheSensors(){
-  int waterLightSensorValue = analogRead(waterLightSensorPin);
-  int solarLightSensorValue = analogRead(solarLightSensorPin);
-  
-  if(waterLightSensorValue < waterLightSensorThreshold){
-    waterLightSensorTriggered = true;
-    lcd.setCursor(0, 0);
-    lcd.print("*");
-  }
-  else{
-    waterLightSensorTriggered = false;
-    lcd.setCursor(0, 0);
-    lcd.print(" ");
-  }
-
-  if(solarLightSensorValue < solarLightSensorThreshold){
-    solarLightSensorTriggered = true;
-    lcd.setCursor(6, 0);
-    lcd.print("*");
-  }
-  else{
-    solarLightSensorTriggered = false;
-    lcd.setCursor(6, 0);
-    lcd.print(" ");
-  }
-
-  moistureDecreaseSpeed = map(analogRead(moistureDecreaseSpeedPin), 0, 1024, 1, 255);
-  solarCycleLength = moistureDecreaseSpeed*60;
-
-  realMoistureLevel = map(analogRead(moistureSensorPin),lowerMoistureThreshold, upperMoistureThreshold, 0, 255);
-  
-}
-
-void decreaseMoisture(){
-  if(cycle%moistureDecreaseSpeed==0){
-    moistureLevel-=1;
-  }
-  moistureLevel = constrain(moistureLevel, 0, 255);   
 }
 
 
-void waterLEDshow(){
-  int waterHueStart = 166;
-  int waterHueRange = 30;
-  
-  if(cycle%moistureDecreaseSpeed/3==0){
-    moistureLevel+=2;
-  }
-  if(cycle%51==0){
-    for(int i = 0; i < NUM_WATER_LEDS; i++){
-      if((!evenCycle && i%2==1)||(evenCycle && i%2!=1)){
-        waterLEDs[i]=CRGB::White;
-      }
-      else{
-        waterLEDs[i]= CHSV(random(waterHueStart, waterHueStart+waterHueRange),255,255); 
-      }
-    }
-  }
-  
-}
-
-void waterLEDDecay(){
-  fadeToBlackBy(waterLEDs, NUM_WATER_LEDS, 10);
-}
-
-
-//void cycleColors(int colorStart, int colorRange){
-//  for(int i = 0; i < NUM_LEDS; i++){
-//       leds[i] = CHSV( (gHue%colorRange)+colorStart, 255, 255);
-//       gHue += 1;
-//       delay(10);
-//       FastLED.show();
-//    }
-//}
