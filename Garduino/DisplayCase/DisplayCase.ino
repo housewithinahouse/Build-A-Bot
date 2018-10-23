@@ -1,17 +1,22 @@
 #include "FastLED.h"
 #include <LiquidCrystal.h>
+#include <SPI.h>
+#include <SD.h>
+#include <Wire.h>
+#include "RTClib.h"
 
 const int waterPumpPin = 2;
-const int waterSolenoidPin = 3;
-const int waterLEDPin = 4; 
-const int solarLEDPin = 5; 
-const int moistureLEDPin = 6;
+const int waterSolenoidPin = 3; // consider elminating?
+const int waterLEDPin = 4;      // < combine? and put on pin 3
+const int solarLEDPin = 5;      // <
+const int moistureLEDPin = 6;   // <
 const int rs = 7;
 const int en = 8;
 const int d4 = 9;
-const int d5 = 10;
-const int d6 = 11;
-const int d7 = 12;
+const int chipSelect = 10;      // 10-13 needed for SD card
+const int d6 = 11; // < need these 3 pins free for SPI
+const int d7 = 12; // < maybe move to 4, 5, 6? 
+const int d5 = 13; // < otherwise get shift register...
 const int waterLightSensorPin = A0;
 const int solarLightSensorPin = A1;
 const int moistureSensorPin = A2;
@@ -27,6 +32,8 @@ CRGB solarLEDs[NUM_SOLAR_LEDS];
 CRGB moistureLEDs[NUM_MOISTURE_LEDS];
 
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+
+RTC_PCF8523 rtc;
 
 int gHue = 0;
 
@@ -100,7 +107,20 @@ byte sunFilled[8] = {
 
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(57600); //needed speed for rtc 
+
+  if (!SD.begin(4)) {
+    Serial.println("initialization failed!");
+    return;
+  }
+  Serial.println("initialization done.");
+
+  Wire.begin();
+  
+  if (! rtc.begin()) {
+    Serial.println("Couldn't find RTC");
+    while (1);
+  }
   
   FastLED.addLeds<NEOPIXEL, waterLEDPin>(waterLEDs, NUM_WATER_LEDS); 
   FastLED.addLeds<NEOPIXEL, solarLEDPin>(solarLEDs, NUM_SOLAR_LEDS); 
