@@ -43,7 +43,7 @@ int solarLightSensorThreshold = 300;    //out of 1024
 int lowerMoistureSensorThreshold = 100; //out of 1024
 int upperMoistureSensorThreshold = 150; //out of 1024
 
-int moistureLevelToStartWateringAt = 0;          //out of 255
+int moistureLevelToStartWateringAt = 0;  //out of 255
 int moistureLevelToStopWateringAt = 200; //out of 255
 
 bool waterUntilFull = false;
