@@ -130,7 +130,7 @@ void setup() {
   FastLED.addLeds<NEOPIXEL, waterLEDPin>(waterLEDs, NUM_WATER_LEDS); 
   FastLED.addLeds<NEOPIXEL, solarLEDPin>(solarLEDs, NUM_SOLAR_LEDS); 
   FastLED.addLeds<NEOPIXEL, moistureLEDPin>(moistureLEDs, NUM_MOISTURE_LEDS); 
-  FastLED.setBrightness(neoPixelmMaxBrightness); 
+  FastLED.setBrightness(neoPixelMaxBrightness); 
 
   lcd.begin(16, 2);
   lcd.createChar(0, waterdropEmpty);
