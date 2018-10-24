@@ -44,9 +44,10 @@ int neoPixelMaxBrightness = 10;
 
 int moistureLevel = 0;
 int realMoistureLevel = 0;
-int moistureDecreaseSpeed = 251;
-int solarCycleLength = 900;
-int textDisplayCycle = 300;
+
+int moistureDecreaseSpeed = 251; // change all of these to millis
+int solarCycleLength = 900;      // <
+int textDisplayCycle = 300;      // <
 
 int cycle = 0;
 
