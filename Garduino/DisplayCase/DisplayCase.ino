@@ -6,6 +6,7 @@
 #include <utility/Adafruit_MCP23017.h>
 #include "RTClib.h"
 
+
 const int waterPumpPin = 2;
 const int waterSolenoidPin = 3; 
 const int waterLEDPin = 4;      
@@ -38,6 +39,7 @@ Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();
 #define WHITE 0x7
 
 RTC_PCF8523 rtc;
+
 
 int gHue = 0;
 int neoPixelMaxBrightness = 10; 
@@ -114,7 +116,7 @@ byte sunFilled[8] = {
 
 void setup() {
   Serial.begin(57600); //needed speed for rtc 
-
+  
   if (!SD.begin(4)) {
     Serial.println("initialization failed!");
     return;
@@ -139,6 +141,8 @@ void setup() {
   lcd.createChar(2, sunEmpty);
   lcd.createChar(3, sunFilled);
   lcd.setBacklight(WHITE);
+
+
 
   pinMode(waterPumpPin, OUTPUT);
   pinMode(waterSolenoidPin, OUTPUT);
@@ -193,7 +197,7 @@ void loop(){
 
   //light up all the lights
   FastLED.show();
-  
+
   //increase the cycle count
   cycle++;  // shouldn't need this after we retime animations to use millis. 
 }
