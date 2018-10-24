@@ -3,7 +3,8 @@ void checkTheSensors(){
   int solarLightSensorValue = analogRead(solarLightSensorPin);
   
   if(waterLightSensorValue < waterLightSensorThreshold){
-    waterLightSensorTriggered = true;   
+    waterLightSensorTriggered = true;
+    logInteraction("water");   
   }
   else{
     waterLightSensorTriggered = false;
@@ -11,6 +12,7 @@ void checkTheSensors(){
 
   if(solarLightSensorValue < solarLightSensorThreshold){
     solarLightSensorTriggered = true;
+    logInteraction("solar");
   }
   else{
     solarLightSensorTriggered = false;

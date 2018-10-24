@@ -3,7 +3,7 @@ void logInteraction(String sensorName){
   String dataString = "";
   dataString+=sensorName;
   dataString+=",";
-  dataString += 0; //rtc code goes here
+  dataString += " //datetime placeholder//"; //rtc code goes here
   
   File dataFile = SD.open("datalog.txt", FILE_WRITE);
   
