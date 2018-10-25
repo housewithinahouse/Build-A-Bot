@@ -59,6 +59,9 @@ int matrixCursorPos = 20;
 const long matrixAnimationInterval = 500;
 unsigned long previousMatrixMillis = 0;
 
+const long solarCycleInterval = 50000;
+unsigned long previousSolarMillis = 0;
+
 int cycle = 0;
 
 int waterLightSensorThreshold = 300;    //out of 1024
@@ -166,7 +169,6 @@ void setup() {
 void loop(){
   // two light level sensors, a pot, and our moisture sensor
   checkTheSensors();
-  
 
   // central logic of system, needs to have animations broken out into their own function probs. 
   if(waterLightSensorTriggered||waterUntilFull){
@@ -199,8 +201,9 @@ void loop(){
   }
 
   //oscillate between having solar light on and off at 50% duty cycle
-  if(cycle%solarCycleLength==0){  //replace with something like this: https://www.arduino.cc/en/Tutorial/BlinkWithoutDelay
+   if(currentMillis - previousSolarMillis >= solarCycleInterval){ 
      timeToShine=!timeToShine;
+     previousSolarMillis = currentMillis;
   }
 
   LEDMatrixShow();

@@ -31,7 +31,7 @@ void lcdSolarLevel(bool solarOn){
     lcd.write(byte(2));
   }
   lcd.print(F("-"));
-  lcd.print(map(cycle%solarCycleLength, 0, solarCycleLength, 99, 0));
+  lcd.print(map(currentMillis - previousSolarMillis, 0, solarCycleInterval, 99, 0));
   lcd.print(F(" "));
 }
 
@@ -58,13 +58,13 @@ void lcdSolarLightSensor(bool sensorTriggered){
 void lcdText(bool textCycle){
   lcd.setCursor(10, 0);
   if(textCycle){ 
-   // lcd.write(" BUILD");
+    lcd.print(F(" BUILD"));
     lcd.setCursor(11, 1);
-   // lcd.write("A BOT");
+    lcd.print(F("A BOT"));
   }
   else{
-   // lcd.write("GROW A");
+    lcd.print(F("GROW A"));
     lcd.setCursor(11, 1);
-    //lcd.write("PLANT");
+    lcd.print(F("PLANT"));
   } 
 } 

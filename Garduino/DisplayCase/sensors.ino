@@ -4,7 +4,7 @@ void checkTheSensors(){
   
   if(waterLightSensorValue < waterLightSensorThreshold){
     waterLightSensorTriggered = true;
-    //logInteraction(F("water"));   
+    logInteraction(F("water"));   
   }
   else{
     waterLightSensorTriggered = false;
@@ -12,7 +12,7 @@ void checkTheSensors(){
 
   if(solarLightSensorValue < solarLightSensorThreshold){
     solarLightSensorTriggered = true;
-    //logInteraction(F("solar"));
+    logInteraction(F("solar"));
   }
   else{
     solarLightSensorTriggered = false;

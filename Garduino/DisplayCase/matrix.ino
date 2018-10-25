@@ -4,8 +4,7 @@ void LEDMatrixShow(){
   matrix.setTextColor(LED_ON);
   
   if(currentMillis-previousMatrixMillis>=matrixAnimationInterval){
-    Serial.println(currentMillis);
-    Serial.println(previousMatrixMillis);
+
     previousMatrixMillis = currentMillis;
     matrix.clear();
     matrix.setCursor(matrixCursorPos,0);
