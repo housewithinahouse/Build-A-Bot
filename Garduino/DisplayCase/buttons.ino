@@ -7,19 +7,19 @@ void checkButtons(){
     lcd.clear();
     lcd.setCursor(0,0);
     if (buttons & BUTTON_UP) {
-      lcd.print("UP ");
+      lcd.print(F("UP "));
     }
     if (buttons & BUTTON_DOWN) {
-      lcd.print("DOWN ");
+      lcd.print(F("DOWN "));
     }
     if (buttons & BUTTON_LEFT) {
-      lcd.print("LEFT ");
+      lcd.print(F("LEFT "));
     }
     if (buttons & BUTTON_RIGHT) {
-      lcd.print("RIGHT ");
+      lcd.print(F("RIGHT "));
     }
     if (buttons & BUTTON_SELECT) {
-      lcd.print("SELECT ");
+      lcd.print(F("SELECT "));
     }
   }
 }
