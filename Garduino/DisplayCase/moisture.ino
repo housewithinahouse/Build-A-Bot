@@ -1,6 +1,7 @@
 void moistureLED(){
   int gHue = 0;
   if(currentMillis - previousMoistureMillis >= moistureAnimationInterval){  // < replaced, do like this to other animations...
+    previousMoistureMillis = currentMillis;
     for(int i = 0; i < NUM_MOISTURE_LEDS; i++){
       int colorRange = 17;
       int colorStart = map(moistureLevel, 0, 255, 50, 120);

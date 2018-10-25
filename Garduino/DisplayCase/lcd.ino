@@ -58,13 +58,13 @@ void lcdSolarLightSensor(bool sensorTriggered){
 void lcdText(bool textCycle){
   lcd.setCursor(10, 0);
   if(textCycle){ 
-    lcd.write(F(" BUILD"));
+   // lcd.write(" BUILD");
     lcd.setCursor(11, 1);
-    lcd.write(F("A BOT"));
+   // lcd.write("A BOT");
   }
   else{
-    lcd.write(F("GROW A"));
+   // lcd.write("GROW A");
     lcd.setCursor(11, 1);
-    lcd.write(F("PLANT"));
+    //lcd.write("PLANT");
   } 
 } 

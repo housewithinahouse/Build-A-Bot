@@ -4,20 +4,16 @@
 #include <Wire.h>
 #include <Adafruit_RGBLCDShield.h>
 #include <utility/Adafruit_MCP23017.h>
-#include "RTClib.h"
+//#include "RTClib.h"
+#include <Adafruit_GFX.h>
+#include "Adafruit_LEDBackpack.h"
 
 const int waterPumpPin = 2;
 const int waterSolenoidPin = 3; 
 const int waterLEDPin = 4;      
 const int solarLEDPin = 5;      
 const int moistureLEDPin = 6;   
-const int rs = 7; //kill// 3 digital pins free now! 
-const int en = 8; //kill// What do you want to do with 
-const int d4 = 9; //kill// them?
 const int chipSelect = 10;      // 10-13 needed for SD card
-const int d6 = 11; // < need these 3 pins free for SPI
-const int d7 = 12; // < elimanate
-const int d5 = 13; // < ...got a new shield that uses I2C!
 const int waterLightSensorPin = A0;
 const int solarLightSensorPin = A1;
 const int moistureSensorPin = A2;
@@ -35,10 +31,12 @@ CRGB moistureLEDs[NUM_MOISTURE_LEDS];
 
 Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();
 
+Adafruit_8x8matrix matrix = Adafruit_8x8matrix();
+
 // "needed for LCD backlight" kinda. Would be cool if we could get RGB lcd...
 #define WHITE 0x7
 
-RTC_PCF8523 rtc;
+//RTC_PCF8523 rtc;
 
 
 
@@ -54,9 +52,12 @@ int textDisplayCycle = 300;      // <
 // numbers needed for animation:
 unsigned long currentMillis = 0;
 //moisture:
-const long moistureAnimationInterval = 500;
-unsigned long previousMoistureMillis = 0; 
+const long moistureAnimationInterval = 100;
+unsigned long previousMoistureMillis = 1000; 
 
+int matrixCursorPos = 20; 
+const long matrixAnimationInterval = 500;
+unsigned long previousMatrixMillis = 0;
 
 int cycle = 0;
 
@@ -124,7 +125,7 @@ byte sunFilled[8] = {
 void setup() {
   Serial.begin(57600); //needed speed for rtc 
   
-  if (!SD.begin(4)) {
+  if (!SD.begin(chipSelect)) {
     Serial.println(F("initialization failed!"));
     return;
   }
@@ -132,10 +133,12 @@ void setup() {
 
   Wire.begin();
   
-  if (! rtc.begin()) {
-    Serial.println(F("Couldn't find RTC"));
-    while (1);
-  }
+  //if (! rtc.begin()) {
+   // Serial.println(F("Couldn't find RTC"));
+  //  while (1);
+ // }
+
+  matrix.begin(0x70);  // pass in the address
   
   byte neoPixelMaxBrightness = 10; 
   FastLED.addLeds<NEOPIXEL, waterLEDPin>(waterLEDs, NUM_WATER_LEDS); 
@@ -163,6 +166,7 @@ void setup() {
 void loop(){
   // two light level sensors, a pot, and our moisture sensor
   checkTheSensors();
+  
 
   // central logic of system, needs to have animations broken out into their own function probs. 
   if(waterLightSensorTriggered||waterUntilFull){
@@ -198,6 +202,8 @@ void loop(){
   if(cycle%solarCycleLength==0){  //replace with something like this: https://www.arduino.cc/en/Tutorial/BlinkWithoutDelay
      timeToShine=!timeToShine;
   }
+
+  LEDMatrixShow();
   
   //run the lcd display code
   lcdDisplay();
@@ -207,6 +213,5 @@ void loop(){
 
   //increase the cycle count
   cycle++;  // shouldn't need this after we retime animations to use millis. 
+  checkButtons();
 }
-
-
