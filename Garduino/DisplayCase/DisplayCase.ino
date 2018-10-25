@@ -21,7 +21,8 @@ const int d5 = 13; // < ...got a new shield that uses I2C!
 const int waterLightSensorPin = A0;
 const int solarLightSensorPin = A1;
 const int moistureSensorPin = A2;
-const int moistureDecreaseSpeedPin = A3;
+const int moistureDecreaseSpeedPin = A3; // < honestly, we could make a menu system and free up this pin for another sensor if we wanna. 
+// also, FYI A4 + A5 are the i2c pins so we can't use them. But we get the lcd, buttons, and 
 
 #define NUM_WATER_LEDS    16
 CRGB waterLEDs[NUM_WATER_LEDS];
@@ -39,15 +40,23 @@ Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();
 
 RTC_PCF8523 rtc;
 
-int gHue = 0;
-int neoPixelMaxBrightness = 10; 
 
-int moistureLevel = 0;
-int realMoistureLevel = 0;
 
-int moistureDecreaseSpeed = 251; // change all of these to millis
+
+
+byte moistureLevel = 0;
+byte realMoistureLevel = 0;
+
+int moistureDecreaseSpeed = 251; // change all of these to millis 
 int solarCycleLength = 900;      // <
 int textDisplayCycle = 300;      // <
+
+// numbers needed for animation:
+unsigned long currentMillis = 0;
+//moisture:
+const long moistureAnimationInterval = 500;
+unsigned long previousMoistureMillis = 0; 
+
 
 int cycle = 0;
 
@@ -114,20 +123,21 @@ byte sunFilled[8] = {
 
 void setup() {
   Serial.begin(57600); //needed speed for rtc 
-
+  
   if (!SD.begin(4)) {
-    Serial.println("initialization failed!");
+    Serial.println(F("initialization failed!"));
     return;
   }
-  Serial.println("initialization done.");
+  Serial.println(F("initialization done."));
 
   Wire.begin();
   
   if (! rtc.begin()) {
-    Serial.println("Couldn't find RTC");
+    Serial.println(F("Couldn't find RTC"));
     while (1);
   }
   
+  byte neoPixelMaxBrightness = 10; 
   FastLED.addLeds<NEOPIXEL, waterLEDPin>(waterLEDs, NUM_WATER_LEDS); 
   FastLED.addLeds<NEOPIXEL, solarLEDPin>(solarLEDs, NUM_SOLAR_LEDS); 
   FastLED.addLeds<NEOPIXEL, moistureLEDPin>(moistureLEDs, NUM_MOISTURE_LEDS); 
@@ -139,6 +149,8 @@ void setup() {
   lcd.createChar(2, sunEmpty);
   lcd.createChar(3, sunFilled);
   lcd.setBacklight(WHITE);
+
+
 
   pinMode(waterPumpPin, OUTPUT);
   pinMode(waterSolenoidPin, OUTPUT);
@@ -152,25 +164,24 @@ void loop(){
   // two light level sensors, a pot, and our moisture sensor
   checkTheSensors();
 
-  // central logic of system
+  // central logic of system, needs to have animations broken out into their own function probs. 
   if(waterLightSensorTriggered||waterUntilFull){
     waterCycleRunning = true;
-    waterLEDset();
   }
   else{
     waterCycleRunning = false;
-    waterLEDdecay();
   }
   if(solarLightSensorTriggered|timeToShine){
     solarCycleRunning = true;
-    solarLEDset();
   }
   else{
     solarCycleRunning = false;
-    solarLEDdecay();
   }
-
-  moistureLEDset();
+  
+  currentMillis = millis();
+  waterLED(waterCycleRunning);
+  solarLED(solarCycleRunning);
+  moistureLED();
 
   //plant grows drier
   decreaseMoisture();
@@ -193,7 +204,7 @@ void loop(){
 
   //light up all the lights
   FastLED.show();
-  
+
   //increase the cycle count
   cycle++;  // shouldn't need this after we retime animations to use millis. 
 }

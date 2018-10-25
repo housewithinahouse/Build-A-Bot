@@ -17,9 +17,9 @@ void lcdMoistureLevel(bool waterOn){
   else{
     lcd.write(byte(0));
   }
-  lcd.print("-");
+  lcd.print(F("-"));
   lcd.print(map(moistureLevel, 0, 255, 0, 99));
-  lcd.print("% ");
+  lcd.print(F("% "));
 }
 
 void lcdSolarLevel(bool solarOn){
@@ -30,41 +30,41 @@ void lcdSolarLevel(bool solarOn){
   else{  
     lcd.write(byte(2));
   }
-  lcd.print("-");
+  lcd.print(F("-"));
   lcd.print(map(cycle%solarCycleLength, 0, solarCycleLength, 99, 0));
-  lcd.print(" ");
+  lcd.print(F(" "));
 }
 
 void lcdWaterLightSensor(bool sensorTriggered){
   lcd.setCursor(0, 0);
   if(sensorTriggered){
-    lcd.print("*");
+    lcd.print(F("*"));
   }
   else{
-    lcd.print(" ");
+    lcd.print(F(" "));
   }
 }
 
 void lcdSolarLightSensor(bool sensorTriggered){
   lcd.setCursor(6, 0);
   if(sensorTriggered){
-    lcd.print("*");
+    lcd.print(F("*"));
   }
   else{
-    lcd.print(" ");
+    lcd.print(F(" "));
   }
 }
 
 void lcdText(bool textCycle){
   lcd.setCursor(10, 0);
   if(textCycle){ 
-    lcd.write(" BUILD");
+    lcd.write(F(" BUILD"));
     lcd.setCursor(11, 1);
-    lcd.write("A BOT");
+    lcd.write(F("A BOT"));
   }
   else{
-    lcd.write("GROW A");
+    lcd.write(F("GROW A"));
     lcd.setCursor(11, 1);
-    lcd.write("PLANT");
+    lcd.write(F("PLANT"));
   } 
 } 

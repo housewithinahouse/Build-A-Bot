@@ -1,5 +1,6 @@
-void moistureLEDset(){
-  if(cycle%51==0){  // < replace with something like this: https://www.arduino.cc/en/Tutorial/BlinkWithoutDelay
+void moistureLED(){
+  int gHue = 0;
+  if(currentMillis - previousMoistureMillis >= moistureAnimationInterval){  // < replaced, do like this to other animations...
     for(int i = 0; i < NUM_MOISTURE_LEDS; i++){
       int colorRange = 17;
       int colorStart = map(moistureLevel, 0, 255, 50, 120);
