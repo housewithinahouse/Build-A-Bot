@@ -37,6 +37,6 @@ void setup() {
   pinMode(waterLightSensorPin, INPUT);
   pinMode(solarLightSensorPin, INPUT);
   pinMode(moistureSensorPin, INPUT);
-  pinMode(moistureDecreaseSpeedPin, INPUT);
+//  pinMode(moistureDecreaseSpeedPin, INPUT);
 }
 

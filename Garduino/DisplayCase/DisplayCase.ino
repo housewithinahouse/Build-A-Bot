@@ -17,7 +17,6 @@ const int chipSelect = 10;      // 10-13 needed for SD card
 const int waterLightSensorPin = A0;
 const int solarLightSensorPin = A1;
 const int moistureSensorPin = A2;
-const int moistureDecreaseSpeedPin = A3; // < honestly, we could make a menu system and free up this pin for another sensor if we wanna. 
 // also, FYI A4 + A5 are the i2c pins so we can't use them. But we get the lcd, buttons, and 
 
 #define NUM_WATER_LEDS    16
@@ -38,8 +37,6 @@ Adafruit_8x8matrix matrix = Adafruit_8x8matrix();
 byte moistureLevel = 0;
 byte realMoistureLevel = 0;
 
-int moistureDecreaseSpeed = 251; // change all of these to millis 
-int solarCycleLength = 900;      // <
 int textDisplayCycle = 300;      // <
 
 // numbers needed for animation/interval:
@@ -61,6 +58,10 @@ unsigned long previousMatrixMillis = 0;
 // solar cycle: 
 const long solarCycleInterval = 50000;
 unsigned long previousSolarMillis = 0;
+
+// water animation cycle:
+unsigned long previousWaterMillis = 0;
+const long waterAnimationInterval = 100;
 
 int cycle = 0;  // < eliminate 
 

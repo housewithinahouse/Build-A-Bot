@@ -18,9 +18,6 @@ void checkTheSensors(){
     solarLightSensorTriggered = false;
   }
 
-  moistureDecreaseSpeed = map(analogRead(moistureDecreaseSpeedPin), 0, 1024, 1, 255);
-  solarCycleLength = moistureDecreaseSpeed*60;
-
   realMoistureLevel = map(analogRead(moistureSensorPin),lowerMoistureSensorThreshold, upperMoistureSensorThreshold, 0, 255);
   
 }
