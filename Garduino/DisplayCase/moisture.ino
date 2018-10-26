@@ -12,7 +12,7 @@ void moistureLED(){
 }
 
 void decreaseMoisture(){
-  if(cycle%moistureDecreaseSpeed==0){  // < replace with something like this: https://www.arduino.cc/en/Tutorial/BlinkWithoutDelay
+  if(currentMillis - previousMoistureDecayMillis >= moistureDecayInterval){  // < replace with something like this: https://www.arduino.cc/en/Tutorial/BlinkWithoutDelay
     moistureLevel-=1;
   }
   moistureLevel = constrain(moistureLevel, 0, 255);   
