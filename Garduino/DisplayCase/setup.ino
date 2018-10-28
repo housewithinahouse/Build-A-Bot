@@ -1,4 +1,3 @@
-
 void setup() {
   Serial.begin(57600); //needed speed for rtc 
   
