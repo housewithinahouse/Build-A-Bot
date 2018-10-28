@@ -37,8 +37,6 @@ Adafruit_8x8matrix matrix = Adafruit_8x8matrix();
 byte moistureLevel = 0;
 byte realMoistureLevel = 0;
 
-int textDisplayCycle = 300;      // <
-
 // numbers needed for animation/interval:
 unsigned long currentMillis = 0;
 
@@ -63,15 +61,10 @@ unsigned long previousSolarMillis = 0;
 unsigned long previousWaterMillis = 0;
 const long waterAnimationInterval = 100;
 
-int cycle = 0;  // < eliminate 
+// text animation cycle:
+unsigned long previousTextMillis = 0;
+const long textAnimationInterval = 10000;
 
-int waterLightSensorThreshold = 300;    //out of 1024
-int solarLightSensorThreshold = 300;    //out of 1024
-int lowerMoistureSensorThreshold = 100; //out of 1024
-int upperMoistureSensorThreshold = 150; //out of 1024
-
-int moistureLevelToStartWateringAt = 0;  //out of 255
-int moistureLevelToStopWateringAt = 200; //out of 255
 
 bool waterUntilFull = false;
 bool timeToShine = false;

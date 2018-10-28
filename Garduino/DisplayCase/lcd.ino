@@ -1,6 +1,7 @@
 void lcdDisplay(){
-  if(cycle%textDisplayCycle==0){
+  if(currentMillis-previousTextMillis>=textAnimationInterval){
     textFlipFlop=!textFlipFlop;
+    previousTextMillis = currentMillis;
   }
   lcdSolarLightSensor(solarLightSensorTriggered);
   lcdWaterLightSensor(waterLightSensorTriggered);

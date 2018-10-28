@@ -16,6 +16,7 @@ void waterLED(bool cycleIsOn){
           waterLEDs[i]= CHSV(random(waterHueStart, waterHueStart+waterHueRange),255,255); 
         }
       }
+      previousWaterMillis = currentMillis;
     }
   }
   else{

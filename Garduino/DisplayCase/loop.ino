@@ -25,6 +25,9 @@ void loop(){
   decreaseMoisture();
 
   //if the moisture ever gets down to the lower moisture limit, water until moisture threshold is hit
+  int moistureLevelToStartWateringAt = 0;  //out of 255
+  int moistureLevelToStopWateringAt = 200; //out of 255
+  
   if(moistureLevel<=moistureLevelToStartWateringAt){
     waterUntilFull=true;
   }
@@ -46,7 +49,5 @@ void loop(){
   //light up all the lights
   FastLED.show();
 
-  //increase the cycle count
-  cycle++;  // shouldn't need this after we retime animations to use millis. 
   checkButtons();
 }
