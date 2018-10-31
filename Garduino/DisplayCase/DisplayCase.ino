@@ -23,7 +23,7 @@ const int moistureSensorPin = A2;
 #define NUM_WATER_LEDS    16
 CRGB waterLEDs[NUM_WATER_LEDS];
 
-#define NUM_SOLAR_LEDS    16
+#define NUM_SOLAR_LEDS    60
 CRGB solarLEDs[NUM_SOLAR_LEDS];
 
 #define NUM_MOISTURE_LEDS    16

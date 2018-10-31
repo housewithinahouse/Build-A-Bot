@@ -25,8 +25,10 @@ void loop() {
   byte moistureLevel = map(analogRead(moistureSensorPin),lowerMoistureSensorThreshold, upperMoistureSensorThreshold, 0, 255);
 
   const long wateringInterval = 10000;
+  byte wateringThreshold = 20;
   if ((moistureLevel < wateringThreshold) && (currentMillis - previousWateringMillis >= wateringInterval)){
     waterUntilFull = true;
+    previousWateringMillis = currentMillis;
   }
   else{
     waterUntilFull = false;
@@ -35,6 +37,7 @@ void loop() {
   const long wateringLength = 100;
   if(waterUntilFull && (currentMillis - wateringStartTime >= wateringLength){
     digitalWrite(3, HIGH);
+    wateringStartTime = currentMillis;
   }
   else{
     digitalWrite(3,LOW);

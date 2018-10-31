@@ -16,7 +16,7 @@ void setup() {
 
   matrix.begin(0x70);  // pass in the address
   
-  byte neoPixelMaxBrightness = 10; 
+  byte neoPixelMaxBrightness = 50; 
   FastLED.addLeds<NEOPIXEL, waterLEDPin>(waterLEDs, NUM_WATER_LEDS); 
   FastLED.addLeds<NEOPIXEL, solarLEDPin>(solarLEDs, NUM_SOLAR_LEDS); 
   FastLED.addLeds<NEOPIXEL, moistureLEDPin>(moistureLEDs, NUM_MOISTURE_LEDS); 
@@ -37,4 +37,3 @@ void setup() {
   pinMode(solarLightSensorPin, INPUT);
   pinMode(moistureSensorPin, INPUT);
 }
-
