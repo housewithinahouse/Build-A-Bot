@@ -3,7 +3,7 @@
 void solarLED(bool cycleIsOn){
   if(cycleIsOn){
     for(int i = 0; i < NUM_SOLAR_LEDS; i++){
-      solarLEDs[i]=CRGB::White;
+      solarLEDs[i]=CHSV( gHue + random8(64,110), 200, 255);
 
       //This is where we get to make pretty animations for the solar part of the cycle. 
     }
