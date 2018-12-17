@@ -17,6 +17,8 @@ const int chipSelect = 10;      // 10-13 needed for SD card
 const int waterLightSensorPin = A0;
 const int solarLightSensorPin = A1;
 const int moistureSensorPin = A2;
+float waterAvg = 400;
+float solarAvg = 0;
 // also, FYI A4 + A5 are the i2c pins so we can't use them. But we get the lcd, buttons, and matrix from these pins...
 
 

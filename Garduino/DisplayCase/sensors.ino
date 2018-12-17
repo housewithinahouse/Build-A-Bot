@@ -2,8 +2,21 @@ void checkTheSensors(){
   int waterLightSensorValue = analogRead(waterLightSensorPin);
   int solarLightSensorValue = analogRead(solarLightSensorPin);
 
-  int waterLightSensorThreshold = 300;    //out of 1024
-  int solarLightSensorThreshold = 300;    //out of 1024
+  float sensorWeight = 0.1;
+
+  if(waterLightSensorValue > waterAvg){
+    waterAvg += sensorWeight;
+  }
+  else{
+    waterAvg -= sensorWeight;
+  }
+  Serial.print("water Avg:");
+  Serial.println(waterAvg);
+  Serial.print("water sen:");
+  Serial.println(waterLightSensorValue);
+
+  int waterLightSensorThreshold = waterAvg - 20;    //out of 1024
+  int solarLightSensorThreshold = solarAvg - 50;    //out of 1024
   
   if(waterLightSensorValue < waterLightSensorThreshold){
     waterLightSensorTriggered = true;
