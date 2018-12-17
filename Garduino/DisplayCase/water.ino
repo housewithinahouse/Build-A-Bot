@@ -1,23 +1,25 @@
-void waterLEDset(){
-  int waterHueStart = 166;
-  int waterHueRange = 30;
-  
-  if(cycle%moistureDecreaseSpeed/3==0){
-    moistureLevel+=2;
-  }
-  if(cycle%51==0){
-    for(int i = 0; i < NUM_WATER_LEDS; i++){
-      if((cycle%2==0 && i%2==1)||(cycle%2==1 && i%2!=1)){
-        waterLEDs[i]=CRGB::White;
+void waterLED(bool cycleIsOn){
+  if(cycleIsOn){
+    byte waterHueStart = 166;
+    byte waterHueRange = 30;
+
+    
+   if(currentMillis - previousMoistureMillis >= moistureAnimationInterval/10){ //replace with something like this: https://www.arduino.cc/en/Tutorial/BlinkWithoutDelay
+      moistureLevel+=2;
+    }
+    if(currentMillis - previousWaterMillis >= waterAnimationInterval){  //replace with something like this: https://www.arduino.cc/en/Tutorial/BlinkWithoutDelay
+      for(int i = 0; i < NUM_WATER_LEDS; i++){
+        if((currentMillis%2==0 && i%2==1)||(currentMillis%2==1 && i%2!=1)){
+          waterLEDs[i]=CRGB::White;
+        }
+        else{
+          waterLEDs[i]= CHSV(random(waterHueStart, waterHueStart+waterHueRange),255,255); 
+        }
       }
-      else{
-        waterLEDs[i]= CHSV(random(waterHueStart, waterHueStart+waterHueRange),255,255); 
-      }
+      previousWaterMillis = currentMillis;
     }
   }
-  
-}
-
-void waterLEDdecay(){
-  fadeToBlackBy(waterLEDs, NUM_WATER_LEDS, 10);
+  else{
+    fadeToBlackBy(waterLEDs, NUM_WATER_LEDS, 10);
+  }
 }

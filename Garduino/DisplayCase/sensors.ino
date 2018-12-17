@@ -1,9 +1,13 @@
 void checkTheSensors(){
   int waterLightSensorValue = analogRead(waterLightSensorPin);
   int solarLightSensorValue = analogRead(solarLightSensorPin);
+
+  int waterLightSensorThreshold = 300;    //out of 1024
+  int solarLightSensorThreshold = 300;    //out of 1024
   
   if(waterLightSensorValue < waterLightSensorThreshold){
-    waterLightSensorTriggered = true;   
+    waterLightSensorTriggered = true;
+    logInteraction(F("water"));   
   }
   else{
     waterLightSensorTriggered = false;
@@ -11,13 +15,13 @@ void checkTheSensors(){
 
   if(solarLightSensorValue < solarLightSensorThreshold){
     solarLightSensorTriggered = true;
+    logInteraction(F("solar"));
   }
   else{
     solarLightSensorTriggered = false;
   }
-
-  moistureDecreaseSpeed = map(analogRead(moistureDecreaseSpeedPin), 0, 1024, 1, 255);
-  solarCycleLength = moistureDecreaseSpeed*60;
+  int lowerMoistureSensorThreshold = 100; //out of 1024
+  int upperMoistureSensorThreshold = 150; //out of 1024
 
   realMoistureLevel = map(analogRead(moistureSensorPin),lowerMoistureSensorThreshold, upperMoistureSensorThreshold, 0, 255);
   

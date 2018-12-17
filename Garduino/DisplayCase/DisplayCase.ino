@@ -1,50 +1,71 @@
 #include "FastLED.h"
-#include <LiquidCrystal.h>
+#include <SPI.h>
+#include <SD.h>
+#include <Wire.h>
+#include <Adafruit_RGBLCDShield.h>
+#include <utility/Adafruit_MCP23017.h>
+//#include "RTClib.h"
+#include <Adafruit_GFX.h>
+#include "Adafruit_LEDBackpack.h"
 
 const int waterPumpPin = 2;
-const int waterSolenoidPin = 3;
-const int waterLEDPin = 4; 
-const int solarLEDPin = 5; 
-const int moistureLEDPin = 6;
-const int rs = 7;
-const int en = 8;
-const int d4 = 9;
-const int d5 = 10;
-const int d6 = 11;
-const int d7 = 12;
+const int waterSolenoidPin = 3; 
+const int waterLEDPin = 4;      
+const int solarLEDPin = 5;      
+const int moistureLEDPin = 6;   
+const int chipSelect = 10;      // 10-13 needed for SD card
 const int waterLightSensorPin = A0;
 const int solarLightSensorPin = A1;
 const int moistureSensorPin = A2;
-const int moistureDecreaseSpeedPin = A3;
+// also, FYI A4 + A5 are the i2c pins so we can't use them. But we get the lcd, buttons, and matrix from these pins...
+
 
 #define NUM_WATER_LEDS    16
 CRGB waterLEDs[NUM_WATER_LEDS];
 
-#define NUM_SOLAR_LEDS    16
+#define NUM_SOLAR_LEDS    60
 CRGB solarLEDs[NUM_SOLAR_LEDS];
 
 #define NUM_MOISTURE_LEDS    16
 CRGB moistureLEDs[NUM_MOISTURE_LEDS];
 
-LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();
 
-int gHue = 0;
+Adafruit_8x8matrix matrix = Adafruit_8x8matrix();
 
-int moistureLevel = 0;
-int realMoistureLevel = 0;
-int moistureDecreaseSpeed = 251;
-int solarCycleLength = 900;
-int textDisplayCycle = 300;
+//RTC_PCF8523 rtc;
 
-int cycle = 0;
+byte moistureLevel = 0;
+byte realMoistureLevel = 0;
 
-int waterLightSensorThreshold = 300;    //out of 1024
-int solarLightSensorThreshold = 300;    //out of 1024
-int lowerMoistureSensorThreshold = 100; //out of 1024
-int upperMoistureSensorThreshold = 150; //out of 1024
+// numbers needed for animation/interval:
+unsigned long currentMillis = 0;
 
-int moistureLevelToStartWateringAt = 0;  //out of 255
-int moistureLevelToStopWateringAt = 200; //out of 255
+// moisture animations:
+const long moistureAnimationInterval = 100;
+unsigned long previousMoistureMillis = 1000; 
+
+// moisture decay
+const long moistureDecayInterval = 100;
+unsigned long previousMoistureDecayMillis = 0; 
+
+// matrix stuff
+int matrixCursorPos = 20; 
+const long matrixAnimationInterval = 500;
+unsigned long previousMatrixMillis = 0;
+
+// solar cycle: 
+const long solarCycleInterval = 50000;
+unsigned long previousSolarMillis = 0;
+
+// water animation cycle:
+unsigned long previousWaterMillis = 0;
+const long waterAnimationInterval = 100;
+
+// text animation cycle:
+unsigned long previousTextMillis = 0;
+const long textAnimationInterval = 10000;
+
 
 bool waterUntilFull = false;
 bool timeToShine = false;
@@ -97,80 +118,3 @@ byte sunFilled[8] = {
   0b10101,
   0b00000
 };
-
-
-void setup() {
-  Serial.begin(9600);
-  
-  FastLED.addLeds<NEOPIXEL, waterLEDPin>(waterLEDs, NUM_WATER_LEDS); 
-  FastLED.addLeds<NEOPIXEL, solarLEDPin>(solarLEDs, NUM_SOLAR_LEDS); 
-  FastLED.addLeds<NEOPIXEL, moistureLEDPin>(moistureLEDs, NUM_MOISTURE_LEDS); 
-  FastLED.setBrightness(10); 
-
-  lcd.begin(16, 2);
-  lcd.createChar(0, waterdropEmpty);
-  lcd.createChar(1, waterdropFilled);
-  lcd.createChar(2, sunEmpty);
-  lcd.createChar(3, sunFilled);
-
-  pinMode(waterPumpPin, OUTPUT);
-  pinMode(waterSolenoidPin, OUTPUT);
-  pinMode(waterLightSensorPin, INPUT);
-  pinMode(solarLightSensorPin, INPUT);
-  pinMode(moistureSensorPin, INPUT);
-  pinMode(moistureDecreaseSpeedPin, INPUT);
-}
-
-void loop(){
-  // two light level sensors, a pot, and our moisture sensor
-  checkTheSensors();
-
-  // central logic of system
-  if(waterLightSensorTriggered||waterUntilFull){
-    waterCycleRunning = true;
-    waterLEDset();
-  }
-  else{
-    waterCycleRunning = false;
-    waterLEDdecay();
-  }
-  if(solarLightSensorTriggered|timeToShine){
-    solarCycleRunning = true;
-    solarLEDset();
-  }
-  else{
-    solarCycleRunning = false;
-    solarLEDdecay();
-  }
-
-  moistureLEDset();
-  
-  
-
-  //plant grows drier
-  decreaseMoisture();
-
-  //if the moisture ever gets down to the lower moisture limit, water until moisture threshold is hit
-  if(moistureLevel<=moistureLevelToStartWateringAt){
-    waterUntilFull=true;
-  }
-  else if(moistureLevel>moistureLevelToStopWateringAt){
-    waterUntilFull=false;
-  }
-
-  //oscillate between having solar light on and off at 50% duty cycle
-  if(cycle%solarCycleLength==0){
-     timeToShine=!timeToShine;
-  }
-  
-  //run the lcd display code
-  lcdDisplay();
-
-  //light up all the lights
-  FastLED.show();
-  
-  //increase the cycle count
-  cycle++;
-}
-
-
