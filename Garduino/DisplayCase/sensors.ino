@@ -17,10 +17,16 @@ void checkTheSensors(){
 
   int waterLightSensorThreshold = waterAvg - 20;    //out of 1024
   int solarLightSensorThreshold = solarAvg - 50;    //out of 1024
-  
+    
   if(waterLightSensorValue < waterLightSensorThreshold){
+    waterLightSensorEvent += 1;
+  }
+  else{
+    waterLightSensorEvent = 0;
+  }
+
+  if(waterLightSensorEvent > 2){
     waterLightSensorTriggered = true;
-    logInteraction(F("water"));   
   }
   else{
     waterLightSensorTriggered = false;
