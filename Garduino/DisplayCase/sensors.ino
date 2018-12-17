@@ -10,13 +10,14 @@ void checkTheSensors(){
   else{
     waterAvg -= sensorWeight;
   }
-  Serial.print("water Avg:");
-  Serial.println(waterAvg);
-  Serial.print("water sen:");
-  Serial.println(waterLightSensorValue);
-
+  if(solarLightSensorValue > solarAvg){
+    solarAvg += sensorWeight;
+  }
+  else{
+    solarAvg -= sensorWeight;
+  }
   int waterLightSensorThreshold = waterAvg - 20;    //out of 1024
-  int solarLightSensorThreshold = solarAvg - 50;    //out of 1024
+  int solarLightSensorThreshold = solarAvg - 20;    //out of 1024
     
   if(waterLightSensorValue < waterLightSensorThreshold){
     waterLightSensorEvent += 1;
@@ -27,12 +28,20 @@ void checkTheSensors(){
 
   if(waterLightSensorEvent > 2){
     waterLightSensorTriggered = true;
+    logInteraction(F("water"));
   }
   else{
     waterLightSensorTriggered = false;
   }
 
   if(solarLightSensorValue < solarLightSensorThreshold){
+    solarLightSensorEvent += 1;
+  }
+  else{
+    solarLightSensorEvent = 0;
+  }
+
+  if(solarLightSensorEvent > 2){
     solarLightSensorTriggered = true;
     logInteraction(F("solar"));
   }
