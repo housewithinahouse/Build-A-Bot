@@ -12,7 +12,7 @@ import processing.serial.*;
 Serial myPort;  // Create object from Serial class
 int val;      // Data received from the serial port
 int[] y = new int[400];
-int avgVal;
+int avgVal = 600;
 
 int linefeed = 10; // new line ASCII = 10
 
@@ -35,21 +35,24 @@ void draw()
   print("Val:");
   println(val);
   if(val>avgVal){
-    avgVal+=1;
+    avgVal+=2;
   }
   else if(val<avgVal){
-    avgVal-=1;
+    avgVal-=2;
   }
   
-  
+  int mapY = int(map(val, 0, 1024, 0, 400));
   for (int i = y.length-1; i > 0; i--) {
     y[i] = y[i-1];
   }
-  y[0] = height-avgVal;
+  y[0] = height-mapY;
   println(y[0]);
-  for (int i = 1; i < y.length; i++) {
+  for (int i = 3; i < y.length; i++) {
+   // stroke(int(map(i, 0, 500, 0, 255)), int(map(i, 0, 500, 255, 0)), 255); 
     line(i, y[i], i-1, y[i-1]);
   }
+  //textSize(32);
+  //text(avgVal, 300, 570); 
   delay(10);
 }
 
@@ -66,24 +69,18 @@ void serialEvent (Serial myPort){
 
 
 /*
-
-// Wiring / Arduino Code
-// Code for sensing a switch status and writing the value to the serial port.
-
-int switchPin = 4;                       // Switch connected to pin 4
-
-void setup() {
-  pinMode(switchPin, INPUT);             // Set pin 0 as an input
-  Serial.begin(9600);                    // Start serial communication at 9600 bps
-}
-
-void loop() {
-  if (digitalRead(switchPin) == HIGH) {  // If switch is ON,
-    Serial.write(1);               // send 1 to Processing
-  } else {                               // If the switch is not ON,
-    Serial.write(0);               // send 0 to Processing
+ int mapY = int(map(val, 0, 1024, 0, 400));
+  for (int i = y.length-1; i > 0; i--) {
+    y[i] = y[i-1];
   }
-  delay(100);                            // Wait 100 milliseconds
-}
+  y[0] = mapY;
+  println(y[0]);
+  for (int i = 3; i < y.length; i++) {
+    stroke(int(map(i*4, 0, 500, 0, 255)), int(map(y[i]*4, 0, 500, 255, 0)), 255); 
+    ellipse(i*8, 250, y[i]/2, y[i]/2); //y[i-1]
+  }
+  textSize(32);
+  text(avgVal, 300, 570); 
+  delay(100);
 
 */
