@@ -24,10 +24,10 @@ void loop()
  // read the raw value from the sensor:
  int rawValue = analogRead(sensorPin);   
  
-// Serial.print("Raw = ");
-// Serial.print(rawValue);
-// Serial.print(" - Lux = ");
-// Serial.println(RawToLux(rawValue));
+ //Serial.print("Raw = ");
+ //Serial.print(rawValue);
+ //Serial.print(" - Lux = ");
+ //Serial.println(RawToLux(rawValue));
 // delay(1000);
  //int luxValue = RawToLux(rawValue);
  Serial.println(rawValue);
