@@ -27,39 +27,46 @@ void setup()
   String portName = Serial.list()[0];
   myPort = new Serial(this, portName, 9600);
   myPort.bufferUntil(linefeed);
+  for (int i = y.length-1; i > 0; i--) {
+    y[i] = 700;
+  }
 }
 
 void draw()
 {
-  background(125);             // Set background to gray
+  background(20);             // Set background to gray
   
   stroke(255);
   strokeWeight(1);
-  fill(0,255, 50);
-  //rect(0, height-450, width);
-  line(50, height-450, width, height-450);
-  line(50, height-400, width, height-400);
-  line(50, height-350, width, height-350);
-  line(50, height-300, width, height-300);
-  line(50, height-250, width, height-250);
-  line(50, height-200, width, height-200);
-  line(50, height-150, width, height-150);
+  int lineOffset = 40;
+  line(lineOffset, height-450, width, height-450);
+  line(lineOffset, height-400, width, height-400);
+  line(lineOffset, height-350, width, height-350);
+  line(lineOffset, height-300, width, height-300);
+  line(lineOffset, height-250, width, height-250);
+  line(lineOffset, height-200, width, height-200);
+  line(lineOffset, height-150, width, height-150);
+  
+  
+  fill(255);
+  textSize(11);
+  text("lux",13, height - 125);
   
   textSize(10);
-  stroke(255);
-  text("24000", 10, height-450);
   
-  text(" 8500", 10, height-400);
+  text("24000", 5, height-447);
   
-  text(" 2800", 10, height-350);
+  text(" 8500", 5, height-397);
   
-  text("  850", 10, height-300);
+  text(" 2800", 5, height-347);
   
-  text("  275", 10, height-250);
+  text("  850", 5, height-297);
   
-  text("  100", 10, height-200);
+  text("  275", 5, height-247);
   
-  text("   30", 10, height-150);
+  text("  100", 5, height-197);
+  
+  text("    30", 5, height-147);
   
   
   stroke(0);
@@ -69,12 +76,14 @@ void draw()
   }
   y[0] = height-mapY;
   for (int i = 3; i < y.length; i++) {
-    stroke(255,50,0, 200); 
+    stroke(255,50,0, 150); 
     strokeWeight(2);
     line(i, y[i], i-1, y[i-1]);
   }
   
-  
+  fill(0,255, 50, 40);
+  noStroke();
+  rect(0, height-450, width, 40);
   
   delay(10);
 }

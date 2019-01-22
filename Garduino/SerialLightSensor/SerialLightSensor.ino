@@ -10,7 +10,7 @@
 int sensorPin = A0;    // select the input pin for the light sensor
  
 float rawRange = 1024; // 3.3v
-float logRange = 5.0; // 3.3v = 10^5 lux (the max our sensor can measure)
+float logRange = 4; // 3.3v = 10^5 lux (the max our sensor can measure)
  
 void setup()
 {
@@ -24,13 +24,13 @@ void loop()
  // read the raw value from the sensor:
  int rawValue = analogRead(sensorPin);   
  
- //Serial.print("Raw = ");
- //Serial.print(rawValue);
- //Serial.print(" - Lux = ");
- //Serial.println(RawToLux(rawValue));
-// delay(1000);
+ Serial.print("Raw = ");
+ Serial.print(rawValue);
+ Serial.print(" - Lux = ");
+ Serial.println(RawToLux(rawValue));
+ delay(1000);
  //int luxValue = RawToLux(rawValue);
- Serial.println(rawValue);
+ //Serial.println(rawValue);
 }
  
 float RawToLux(int raw)
