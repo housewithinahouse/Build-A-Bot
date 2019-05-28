@@ -26,6 +26,8 @@ bool noteB = false;
 bool noteC = false;
 bool noteD = false;
 
+bool notesPlayedThisBeat = false;
+
 void setup()
 {
   Serial.begin(31250);
@@ -63,9 +65,10 @@ void loop() {
 
   if (triggerA) {
     Serial.print("+++   ");
+    notesPlayedThisBeat = false;
   } else {
     Serial.print("---   ");
-    playNotes();
+     if(!notesPlayedThisBeat){playNotes();}
   }
   if (triggerB) {
     Serial.print("+++   ");
@@ -93,6 +96,7 @@ void playNotes(){
   if(noteB){midi(0x0, 0x9, 0x3C, 0x40);}
   if(noteC){midi(0x0, 0x9, 0x3C, 0x40);}
   if(noteD){midi(0x0, 0x9, 0x3C, 0x40);}
+  notesPlayedThisBeat = true;
 }
 
 void midi(byte channel, byte command, byte arg1, byte arg2) {
