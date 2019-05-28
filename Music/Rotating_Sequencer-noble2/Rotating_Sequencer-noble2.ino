@@ -1,35 +1,5 @@
 #include <Wire.h>
 #include <Adafruit_MotorShield.h>
-#include "FifteenStep.h"
-#include "Adafruit_BLE.h"
-#include "Adafruit_BluefruitLE_SPI.h"
-#include "Adafruit_BLEMIDI.h"
-#include "BluefruitConfig.h"
-
-Adafruit_BluefruitLE_SPI ble(BLUEFRUIT_SPI_CS, BLUEFRUIT_SPI_IRQ, BLUEFRUIT_SPI_RST);
-
-#define FACTORYRESET_ENABLE         1
-#define MINIMUM_FIRMWARE_VERSION    "0.7.0"
-
-FifteenStep seq = FifteenStep(1024);
-Adafruit_BLEMIDI blemidi(ble);
-
-bool isConnected = false;
-void error(const __FlashStringHelper*err) {
-  Serial.println(err);
-  while (1);
-}
-void connected(void)
-{
-  isConnected = true;
-  Serial.println(F(" CONNECTED!"));
-}
-
-void disconnected(void)
-{
-  Serial.println("disconnected");
-  isConnected = false;
-}
 
 // Create the motor shield object with the default I2C address
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
@@ -45,65 +15,29 @@ int analogSensorPinA = A0;
 int analogSensorPinB = A1;
 int analogSensorPinC = A2;
 int analogSensorPinD = A3;
-int analogSensorThreshold = 500;
+int analogSensorThreshold = 600;
 
 bool triggerA = false;
 bool triggerB = false;
 bool triggerC = false;
 bool triggerD = false;
 
+bool noteB = false;
+bool noteC = false;
+bool noteD = false;
+
 void setup()
 {
-
-  Serial.print(F("Initialising the Bluefruit LE module: "));
-
-  if ( !ble.begin(VERBOSE_MODE) )
-  {
-    error(F("Couldn't find Bluefruit, make sure it's in CoMmanD mode & check wiring?"));
-  }
-  Serial.println( F("OK!") );
-
-  if ( FACTORYRESET_ENABLE )
-  {
-    /* Perform a factory reset to make sure everything is in a known state */
-    Serial.println(F("Performing a factory reset: "));
-    if ( ! ble.factoryReset() ) {
-      error(F("Couldn't factory reset"));
-    }
-  }
-
-  //ble.sendCommandCheckOK(F("AT+uartflow=off"));
-  ble.echo(false);
-
-  Serial.println("Requesting Bluefruit info:");
-  /* Print Bluefruit information */
-  ble.info();
-  
-  /* Set BLE callbacks */
-  ble.setConnectCallback(connected);
-  ble.setDisconnectCallback(disconnected);
-  
-  Serial.println(F("Enable MIDI: "));
-  if ( ! blemidi.begin(true) )
-  {
-    error(F("Could not enable MIDI"));
-  }
-    
-  ble.verbose(false);
-  Serial.print(F("Waiting for a connection..."));
-  
+  Serial.begin(31250);
   pinMode(analogSensorPinA, INPUT);
   pinMode(analogSensorPinB, INPUT);
   pinMode(analogSensorPinC, INPUT);
   pinMode(analogSensorPinD, INPUT);
   AFMS.begin();  // create with the default frequency 1.6KHz
   myMotor->setSpeed(19);
-
-  
 }
 
 void loop() {
-  blemidi.send(0x0, 0x3C, 0x0);
   Serial.print("  ");
   myMotor->run(FORWARD);
   if (analogRead(analogSensorPinA) > analogSensorThreshold) {
@@ -129,38 +63,46 @@ void loop() {
 
   if (triggerA) {
     Serial.print("+++   ");
-    midi(0x0, 0x9, 0x3C, 0x40);
   } else {
     Serial.print("---   ");
-    midi(0x0, 0x8, 0x3C, 0x0);
+    playNotes();
   }
   if (triggerB) {
     Serial.print("+++   ");
+    noteB=true;
   } else {
     Serial.print("---   ");
   }
   if (triggerC) {
     Serial.print("+++   ");
+    noteC=true;
   } else {
     Serial.print("---   ");
   }
   if (triggerD) {
     Serial.print("+++   ");
+    noteD=true;
   } else {
     Serial.print("---   ");
   }
   Serial.println();
-  delay(50);
+  //delay(50);
+}
+
+void playNotes(){
+  if(noteB){midi(0x0, 0x9, 0x3C, 0x40);}
+  if(noteC){midi(0x0, 0x9, 0x3C, 0x40);}
+  if(noteD){midi(0x0, 0x9, 0x3C, 0x40);}
 }
 
 void midi(byte channel, byte command, byte arg1, byte arg2) {
-  byte combined = command;
-  if(command < 128) {
+  if (command < 128) {
+    // shift over command
     command <<= 4;
+    // add channel to the command
     command |= channel;
   }
-
-  blemidi.send(combined, arg1, arg2);
-  Serial.print("test");
-
+  Serial.write(command);
+  Serial.write(arg1);
+  Serial.write(arg2);
 }
