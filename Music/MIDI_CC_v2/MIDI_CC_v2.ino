@@ -1,10 +1,13 @@
+const uint8_t analogPin = A0;
+
 void setup(){
   Serial.begin(38400);
 }
 void loop(){
-  midi(0x0, 0x9, 0x3C, 0x40);
-  delay(1000);
-  midi(0x0, 0x9, 0x3C, 0x40);
+  uint16_t analogValue = analogRead(analogPin);    // Read the value of the analog input
+  uint8_t CC_value = analogValue >> 3; 
+      
+  midi(0x0, 0xB0, 0x10, CC_value);
   delay(1000);
 }
 void midi(byte channel, byte command, byte arg1, byte arg2) {
